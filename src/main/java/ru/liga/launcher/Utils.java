@@ -1,33 +1,25 @@
-package ru.liga;
+package ru.liga.launcher;
+
+import ru.liga.currency.CurrencyType;
 
 import java.io.InputStream;
-import java.util.List;
-import java.util.Scanner;
 
-public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+public class Utils {
 
-        printCurrencies();
-        printCommand();
+    /**
+     * Максимальное количество слов в команде для расчета прогноза
+     */
+    private static final int RATE_COMMAND_LENGTH = 3;
 
-        while (true) {
-            System.out.println("Введите команду:");
-            String command = scanner.nextLine();
+    /**
+     * Индекс значения валюты в команде для расчета прогноза
+     */
+    private static final int CURRENCY_TYPE_INDEX = 1;
 
-            if (command.equals("q")) break;
-            CurrencyType targetCurrency = findCurrencyType(parseCommand(command));
-            int targetDaysAmount = findDaysAmount(parseCommand(command));
-
-            if (targetCurrency == null || targetDaysAmount == 0) continue;
-            List<CurrencyDto> currencyDtos = CSVParser.loadFromFile(findFileByCurrency(targetCurrency));
-            List<CurrencyDto> resultRates = CurrencyForecaster.predictRateForSomeDays(currencyDtos, targetDaysAmount);
-
-            for (CurrencyDto resultRate : resultRates) {
-                System.out.println(resultRate);
-            }
-        }
-    }
+    /**
+     * Индекс количества дней в команде для расчета прогноза
+     */
+    private static final int DAYS_AMOUNT_INDEX = 2;
 
     public static void printCurrencies() {
         StringBuilder values = new StringBuilder();
@@ -45,13 +37,23 @@ public class Main {
         System.out.println("Примеры доступных команд:\n- rate TRY tomorrow\n- rate USD week\n- q (выход)\n");
     }
 
+    /**
+     * Парсинг команды пользователя в массив строк
+     * @param command Введенная команда
+     * @return Результат парсинга по пробелам
+     */
     public static String[] parseCommand(String command) {
         return command.split(" ");
     }
 
+    /**
+     * Сопоставление строчного значения валюты с перечислением в коде
+     * @param command Команда пользователя
+     * @return Значение типа CurrencyType
+     */
     public static CurrencyType findCurrencyType(String[] command) {
-        if (command.length == 3) {
-            switch (command[1]) {
+        if (command.length == RATE_COMMAND_LENGTH) {
+            switch (command[CURRENCY_TYPE_INDEX]) {
                 case "EUR":
                     return CurrencyType.EUR;
                 case "USD":
@@ -68,9 +70,14 @@ public class Main {
         return null;
     }
 
+    /**
+     * Сопоставление строчного значения количества дней с его целочисленным представлением
+     * @param command Команда пользователя
+     * @return Целочисленное значения количества дней, на которое нужно рассчитать прогноз
+     */
     public static int findDaysAmount(String[] command) {
-        if (command.length == 3) {
-            switch (command[2]) {
+        if (command.length == RATE_COMMAND_LENGTH) {
+            switch (command[DAYS_AMOUNT_INDEX]) {
                 case "tomorrow":
                     return 1;
                 case "week":
@@ -82,8 +89,12 @@ public class Main {
         return 0;
     }
 
+    /**
+     * Поиск файла со статистикой по типу валюты
+     * @param currencyType Тип валюты
+     * @return Потоковое представление файла
+     */
     public static InputStream findFileByCurrency(CurrencyType currencyType) {
-
         switch (currencyType) {
             case EUR:
                 return Main.class.getResourceAsStream("EUR.csv");

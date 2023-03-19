@@ -23,7 +23,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.liga.Main</mainClass>
+                            <mainClass>ru.liga.launcher.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
