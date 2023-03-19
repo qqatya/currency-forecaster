@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * Сущность для хранения данных из CSV-файлов со статистикой курсов валют
+ */
 public class CurrencyDto {
     private int nominal;
     private LocalDate date;

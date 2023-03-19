@@ -36,7 +36,7 @@ public class CSVParser {
     }
 
     /**
-     * Конвертация строки в объект Currency Dto
+     * Конвертация строки в объект CurrencyDto
      * @param value Строка, содержащая значения аргументов конструктора CurrencyDto
      * @return Объект CurrencyDto
      */
