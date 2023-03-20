@@ -19,11 +19,15 @@ public class Main {
             System.out.println("Введите команду:");
             String command = scanner.nextLine();
 
-            if (command.equals("q")) { break; }
+            if (command.equals("q")) {
+                break;
+            }
             CurrencyType targetCurrency = Utils.findCurrencyType(Utils.parseCommand(command));
             int targetDaysAmount = Utils.findDaysAmount(Utils.parseCommand(command));
 
-            if (targetCurrency == null || targetDaysAmount == 0) { continue; }
+            if (targetCurrency == null || targetDaysAmount == 0) {
+                continue;
+            }
             List<CurrencyDto> currencyDtos = CSVParser.loadFromFile(Utils.findFileByCurrency(targetCurrency));
             List<CurrencyDto> resultRates = CurrencyForecaster.predictRateForSomeDays(currencyDtos, targetDaysAmount);
 

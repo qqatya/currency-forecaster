@@ -7,6 +7,7 @@ import java.util.List;
 public class CurrencyForecaster {
     /**
      * Расчет прогноза на следующий день
+     *
      * @param currencyDtos Список сущностей, по которым ведется расчет
      * @return Спрогнозированный курс
      */
@@ -21,8 +22,9 @@ public class CurrencyForecaster {
 
     /**
      * Расчет прогноза на N дней
+     *
      * @param currencyDtos Список сущностей, по которым ведется расчет
-     * @param daysAmount Количество дней, на которые нужно рассчитать курс
+     * @param daysAmount   Количество дней, на которые нужно рассчитать курс
      * @return Результат прогноза
      */
     public static List<CurrencyDto> predictRateForSomeDays(List<CurrencyDto> currencyDtos, int daysAmount) {
