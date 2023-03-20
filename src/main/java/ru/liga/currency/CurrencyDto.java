@@ -58,6 +58,6 @@ public class CurrencyDto {
         SimpleDateFormat formatter = new SimpleDateFormat("E dd.MM.yyyy");
 
         return formatter.format(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()))
-                + " - " + String.format("%.4f", rate);
+                + " - " + String.format("%.2f", rate);
     }
 }
