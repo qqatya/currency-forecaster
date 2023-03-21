@@ -48,7 +48,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.liga.launcher.Main</mainClass>
+                            <mainClass>ru.liga.currency_forecaster.CurrencyForecasterApp</mainClass>
                         </manifest>
                     </archive>
                     <!--Ignoring postfix jar-with-dependencies-->
