@@ -1,6 +1,6 @@
-package ru.liga.currency_forecaster.utils;
+package ru.liga.currencyforecaster.service.parser;
 
-import ru.liga.currency_forecaster.model.Currency;
+import ru.liga.currencyforecaster.model.Currency;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -10,11 +10,6 @@ import java.util.List;
 
 public class CsvParser {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-
-    /**
-     * Количество записей в файле, по которым расчитывается прогноз
-     */
-    private static final int RECORDS_AMOUNT = 7;
 
     /**
      * Индекс значения для поля nominal при парсинге строки в объект Currency
@@ -45,8 +40,8 @@ public class CsvParser {
     public static List<Currency> parseFile(List<String> lines) {
         List<Currency> currencies = new ArrayList<>();
 
-        for (int i = 0; i < RECORDS_AMOUNT; i++) {
-            currencies.add(fromString(lines.get(i)));
+        for (String line : lines) {
+            currencies.add(convertStringToCurrency(line));
         }
         return currencies;
     }
@@ -57,7 +52,7 @@ public class CsvParser {
      * @param value Строка, содержащая значения аргументов конструктора Currency
      * @return Объект Currency
      */
-    private static Currency fromString(String value) {
+    private static Currency convertStringToCurrency(String value) {
         String[] split = value.split(";");
         int nominal = Integer.parseInt(split[NOMINAL_INDEX]);
         LocalDate date = LocalDate.parse(split[DATE_INDEX], FORMATTER);

@@ -1,4 +1,4 @@
-package ru.liga.currency_forecaster.model;
+package ru.liga.currencyforecaster.model.type;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,8 @@ public enum CurrencyType {
     TRY("TRY", "TRY.csv"),
     DEF("DEF", "def");
 
+    private final String commandPart;
+    private final String filePath;
     public static final Map<String, CurrencyType> map;
 
     static {
@@ -20,9 +22,6 @@ public enum CurrencyType {
             map.put(v.commandPart, v);
         }
     }
-
-    private final String commandPart;
-    private final String filePath;
 
     CurrencyType(String commandPart, String filePath) {
         this.commandPart = commandPart;

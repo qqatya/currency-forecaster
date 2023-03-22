@@ -1,4 +1,4 @@
-package ru.liga.currency_forecaster.model;
+package ru.liga.currencyforecaster.model.type;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +8,10 @@ import java.util.Map;
  */
 public enum CommandType {
     RATE("rate"),
+    Q("q"),
     DEF("def");
 
+    private final String commandPart;
     public static final Map<String, CommandType> map;
 
     static {
@@ -18,8 +20,6 @@ public enum CommandType {
             map.put(v.commandPart, v);
         }
     }
-
-    private final String commandPart;
 
     CommandType(String commandPart) {
         this.commandPart = commandPart;
@@ -30,9 +30,5 @@ public enum CommandType {
             return DEF;
         }
         return map.get(commandPart);
-    }
-
-    public String getCommandPart() {
-        return commandPart;
     }
 }

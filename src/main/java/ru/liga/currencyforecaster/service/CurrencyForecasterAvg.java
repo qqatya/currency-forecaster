@@ -1,6 +1,6 @@
-package ru.liga.currency_forecaster.service;
+package ru.liga.currencyforecaster.service;
 
-import ru.liga.currency_forecaster.model.Currency;
+import ru.liga.currencyforecaster.model.Currency;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -8,21 +8,26 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CurrencyForecasterService {
+public class CurrencyForecasterAvg {
     /**
      * Расчет прогноза на следующий день
      *
      * @param currencies Список сущностей, по которым ведется расчет
-     * @return Спрогнозированный курс
+     * @return Результат прогноза
      */
-    private static BigDecimal predictRateForNextDay(List<Currency> currencies) {
+    private static Currency predictRateForNextDay(List<Currency> currencies) {
         BigDecimal rateSum = new BigDecimal(0);
         BigDecimal daysAmount = new BigDecimal(currencies.size());
+        int nominal = currencies.get(0).getNominal();
+        String currencyType = currencies.get(0).getCurrencyType();
 
         for (Currency currency : currencies) {
             rateSum = rateSum.add(currency.getRate());
         }
-        return rateSum.divide(daysAmount, RoundingMode.HALF_UP);
+        LocalDate date = LocalDate.now().plusDays(1);
+        BigDecimal nextDayRate = rateSum.divide(daysAmount, RoundingMode.HALF_UP);
+
+        return new Currency(nominal, date, nextDayRate, currencyType);
     }
 
     /**
@@ -35,13 +40,9 @@ public class CurrencyForecasterService {
     public static List<Currency> predictRateForSomeDays(List<Currency> currencies, int daysAmount) {
         List<Currency> tmpCurrencies = new ArrayList<>(currencies);
         List<Currency> ratesResult = new ArrayList<>();
-        int nominal = tmpCurrencies.get(0).getNominal();
-        String currencyType = tmpCurrencies.get(0).getCurrencyType();
 
         for (int i = 1; i <= daysAmount; i++) {
-            LocalDate date = LocalDate.now().plusDays(i);
-            BigDecimal predictedRate = predictRateForNextDay(tmpCurrencies);
-            Currency currency = new Currency(nominal, date, predictedRate, currencyType);
+            Currency currency = predictRateForNextDay(tmpCurrencies);
 
             ratesResult.add(currency);
             tmpCurrencies.remove(0);

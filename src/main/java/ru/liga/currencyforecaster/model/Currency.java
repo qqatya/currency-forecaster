@@ -1,4 +1,4 @@
-package ru.liga.currency_forecaster.model;
+package ru.liga.currencyforecaster.model;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
