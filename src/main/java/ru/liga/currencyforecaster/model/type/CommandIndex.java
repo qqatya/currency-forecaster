@@ -3,7 +3,7 @@ package ru.liga.currencyforecaster.model.type;
 /**
  * Перечисление констант для работы с командами
  */
-public enum CommandIndexes {
+public enum CommandIndex {
     /**
      * Индекс значения начала команды для расчета прогноза
      */
@@ -26,7 +26,7 @@ public enum CommandIndexes {
 
     private final int index;
 
-    CommandIndexes(int index) {
+    CommandIndex(int index) {
         this.index = index;
     }
 

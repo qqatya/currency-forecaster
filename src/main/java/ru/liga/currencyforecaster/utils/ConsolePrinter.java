@@ -13,9 +13,11 @@ public class ConsolePrinter {
         values.append(NOTIFY_ABOUT_CURRENCIES.getMessage());
 
         for (CurrencyType value : CurrencyType.values()) {
-            values.append("- ")
-                    .append(value)
-                    .append("\n");
+            if (value != CurrencyType.DEF) {
+                values.append("- ")
+                        .append(value)
+                        .append("\n");
+            }
         }
         return values.toString();
     }

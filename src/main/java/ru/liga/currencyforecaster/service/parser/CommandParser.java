@@ -3,8 +3,8 @@ package ru.liga.currencyforecaster.service.parser;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.model.type.ForecastRange;
 
-import static ru.liga.currencyforecaster.model.type.CommandIndexes.CURRENCY_TYPE_INDEX;
-import static ru.liga.currencyforecaster.model.type.CommandIndexes.DAYS_AMOUNT_INDEX;
+import static ru.liga.currencyforecaster.model.type.CommandIndex.CURRENCY_TYPE_INDEX;
+import static ru.liga.currencyforecaster.model.type.CommandIndex.DAYS_AMOUNT_INDEX;
 
 public class CommandParser {
     /**

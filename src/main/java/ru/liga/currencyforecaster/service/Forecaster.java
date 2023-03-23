@@ -12,6 +12,7 @@ import ru.liga.currencyforecaster.utils.CsvReader;
 import java.util.List;
 import java.util.Scanner;
 
+import static ru.liga.currencyforecaster.model.type.CommandIndex.COMMAND_TYPE_INDEX;
 import static ru.liga.currencyforecaster.model.type.ConsoleMessage.ENTER_COMMAND;
 
 public class Forecaster {
@@ -22,22 +23,22 @@ public class Forecaster {
 
     public static void start() {
         Scanner scanner = new Scanner(System.in);
+        String command;
 
         System.out.print(ConsolePrinter.printCurrencies());
         System.out.print(ConsolePrinter.printCommand());
-        while (true) {
+        do {
             System.out.println(ENTER_COMMAND.getMessage());
-            String command = scanner.nextLine();
-
-            if (CommandType.findByCommand(command) == CommandType.Q) {
-                break;
-            }
+            command = scanner.nextLine();
             String[] parsedCommand = CommandParser.parseCommand(command);
+            CommandValidator commandValidator = new CommandValidator(parsedCommand);
 
-            if (CommandValidator.validate(parsedCommand)) {
+            if (commandValidator.getErrorMessage() != null) {
+                System.out.println(commandValidator.getErrorMessage());
+            } else if (CommandType.findByCommand(parsedCommand[COMMAND_TYPE_INDEX.getIndex()]) != CommandType.Q) {
                 System.out.print(ConsolePrinter.printResult(createResultRates(parsedCommand)));
             }
-        }
+        } while (CommandType.findByCommand(command) != CommandType.Q);
     }
 
     /**
