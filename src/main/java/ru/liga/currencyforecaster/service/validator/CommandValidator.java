@@ -10,8 +10,9 @@ import static ru.liga.currencyforecaster.model.type.ConsoleMessage.*;
 public class CommandValidator {
     private String errorMessage;
 
-    public CommandValidator(String[] command) {
-        validate(command);
+    public CommandValidator(String command) {
+        String[] parsedCommand = command.split(" ");
+        validate(parsedCommand);
     }
 
     public String getErrorMessage() {

@@ -1,8 +1,10 @@
 package ru.liga.currencyforecaster.service;
 
+import ru.liga.currencyforecaster.model.Command;
 import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.model.type.CommandType;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
+import ru.liga.currencyforecaster.model.type.ForecastRange;
 import ru.liga.currencyforecaster.service.parser.CommandParser;
 import ru.liga.currencyforecaster.service.parser.CsvParser;
 import ru.liga.currencyforecaster.service.validator.CommandValidator;
@@ -12,7 +14,6 @@ import ru.liga.currencyforecaster.utils.CsvReader;
 import java.util.List;
 import java.util.Scanner;
 
-import static ru.liga.currencyforecaster.model.type.CommandIndex.COMMAND_TYPE_INDEX;
 import static ru.liga.currencyforecaster.model.type.ConsoleMessage.ENTER_COMMAND;
 
 public class Forecaster {
@@ -24,18 +25,22 @@ public class Forecaster {
     public static void start() {
         Scanner scanner = new Scanner(System.in);
         String command;
+        Command parsedCommand;
 
         System.out.print(ConsolePrinter.printCurrencies());
         System.out.print(ConsolePrinter.printCommand());
         do {
             System.out.println(ENTER_COMMAND.getMessage());
             command = scanner.nextLine();
-            String[] parsedCommand = CommandParser.parseCommand(command);
-            CommandValidator commandValidator = new CommandValidator(parsedCommand);
+            CommandValidator commandValidator = new CommandValidator(command);
 
             if (commandValidator.getErrorMessage() != null) {
                 System.out.println(commandValidator.getErrorMessage());
-            } else if (CommandType.findByCommand(parsedCommand[COMMAND_TYPE_INDEX.getIndex()]) != CommandType.Q) {
+                parsedCommand = new Command(CommandType.DEF, CurrencyType.DEF, ForecastRange.DEF);
+            } else {
+                parsedCommand = CommandParser.parseCommand(command);
+            }
+            if (parsedCommand.getCurrency() != CurrencyType.DEF || parsedCommand.getRange() != ForecastRange.DEF) {
                 System.out.print(ConsolePrinter.printResult(createResultRates(parsedCommand)));
             }
         } while (CommandType.findByCommand(command) != CommandType.Q);
@@ -44,14 +49,13 @@ public class Forecaster {
     /**
      * Создание списка сущностей с прогнозом курсов валют по типу валюты и количеству дней для прогноза
      *
-     * @param parsedCommand Команда пользователя
+     * @param command Команда пользователя
      * @return Список сущностей с прогнозом курсов валют
      */
-    private static List<Currency> createResultRates(String[] parsedCommand) {
-        CurrencyType targetCurrencyType = CommandParser.findCurrencyType(parsedCommand);
-        int targetDaysAmount = CommandParser.findDaysAmount(parsedCommand);
+    private static List<Currency> createResultRates(Command command) {
+        int targetDaysAmount = command.getRange().getDay();
         List<Currency> currencies = CsvParser.parseFile(CsvReader.
-                readFromFile(CsvReader.loadFileByCurrency(targetCurrencyType), RECORDS_AMOUNT));
+                readFromFile(CsvReader.loadFileByCurrency(command.getCurrency()), RECORDS_AMOUNT));
 
         return CurrencyForecasterAvg.predictRateForSomeDays(currencies, targetDaysAmount);
     }

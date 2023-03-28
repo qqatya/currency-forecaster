@@ -1,39 +1,29 @@
 package ru.liga.currencyforecaster.service.parser;
 
+import ru.liga.currencyforecaster.model.Command;
+import ru.liga.currencyforecaster.model.type.CommandType;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.model.type.ForecastRange;
 
-import static ru.liga.currencyforecaster.model.type.CommandIndex.CURRENCY_TYPE_INDEX;
-import static ru.liga.currencyforecaster.model.type.CommandIndex.DAYS_AMOUNT_INDEX;
+import static ru.liga.currencyforecaster.model.type.CommandIndex.*;
 
 public class CommandParser {
     /**
-     * Парсинг команды пользователя в массив строк
+     * Парсинг команды пользователя в объект Command
      *
      * @param command Введенная команда
-     * @return Результат парсинга по пробелам
+     * @return Объект типа Command
      */
-    public static String[] parseCommand(String command) {
-        return command.split(" ");
-    }
+    public static Command parseCommand(String command) {
+        String[] parsedCommand = command.split(" ");
+        CommandType type = CommandType.findByCommand(parsedCommand[COMMAND_TYPE_INDEX.getIndex()]);
 
-    /**
-     * Сопоставление строчного значения валюты с перечислением в коде
-     *
-     * @param command Команда пользователя
-     * @return Значение типа CurrencyType
-     */
-    public static CurrencyType findCurrencyType(String[] command) {
-        return CurrencyType.findByCommand(command[CURRENCY_TYPE_INDEX.getIndex()]);
-    }
+        if (type == CommandType.Q) {
+            return new Command(type, CurrencyType.DEF, ForecastRange.DEF);
+        }
+        CurrencyType currency = CurrencyType.findByCommand(parsedCommand[CURRENCY_TYPE_INDEX.getIndex()]);
+        ForecastRange range = ForecastRange.findByCommand(parsedCommand[DAYS_AMOUNT_INDEX.getIndex()]);
 
-    /**
-     * Сопоставление строчного значения количества дней с его целочисленным представлением
-     *
-     * @param command Команда пользователя
-     * @return Целочисленное значения количества дней, на которое нужно рассчитать прогноз
-     */
-    public static int findDaysAmount(String[] command) {
-        return ForecastRange.findByCommand(command[DAYS_AMOUNT_INDEX.getIndex()]).getDay();
+        return new Command(type, currency, range);
     }
 }
