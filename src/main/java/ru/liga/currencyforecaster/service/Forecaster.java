@@ -11,6 +11,7 @@ import ru.liga.currencyforecaster.service.validator.CommandValidator;
 import ru.liga.currencyforecaster.utils.ConsolePrinter;
 import ru.liga.currencyforecaster.utils.CsvReader;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,7 +21,7 @@ public class Forecaster {
     /**
      * Количество записей в файле, по которым расчитывается прогноз
      */
-    private static final int RECORDS_AMOUNT = 7;
+    private static final int RECORDS_AMOUNT = 365;
 
     public static void start() {
         Scanner scanner = new Scanner(System.in);
@@ -55,9 +56,9 @@ public class Forecaster {
     private static List<Currency> createResultRates(Command command) {
         int targetDaysAmount = command.getRange().getDay();
         List<Currency> currencies = CsvParser.parseFile(CsvReader.
-                readFromFile(CsvReader.loadFileByCurrency(command.getCurrency()), RECORDS_AMOUNT));
+                readAllFromFile(CsvReader.loadFileByCurrency(command.getCurrency())));
 
-        return CurrencyForecasterAvg.predictRateForSomeDays(currencies, targetDaysAmount);
+        return CurrencyForecasterMystical.predictRateForSomeDays(currencies, LocalDate.now().plusDays(1),
+                targetDaysAmount);
     }
-
 }

@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Сущность для хранения данных из CSV-файлов со статистикой курсов валют
@@ -44,5 +45,14 @@ public class Currency {
 
         return SIMPLE_DATE_FORMATTER.format(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 + " - " + String.format("%.2f", rate);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false; // можно оформить и так
+        Currency currency = (Currency) obj;
+
+        return Objects.equals(date, currency.date);
     }
 }
