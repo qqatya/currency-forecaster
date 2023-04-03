@@ -13,7 +13,17 @@ public enum ConsoleMessage {
     ILLEGAL_COMMAND("Введена неверная команда."),
     UNAVAILABLE_DAYS_AMOUNT("Количество дней недоступно для расчета."),
 
-    IO_EXCEPTION_MESSAGE("Возникла ошибка при считывании файла");
+    IO_EXCEPTION_MESSAGE("Возникла ошибка при считывании файла."),
+    KEY_DOESNT_EXIST("Введенный ключ отсутствует: "),
+    DATE_PERIOD_CONFLICT("Невозможно расчитать прогноз на дату и период одновременно."),
+    OUTPUT_CONFLICT("Ключ -output необходимо вводить совместно с -period."),
+    INVALID_DATE("Значение ключа -date должно содержать дату в формате ДД.ММ.ГГГГ или tomorrow."),
+    INVALID_ALGORITHM("Введен некорректный алгоритм для расчета: "),
+    INVALID_PERIOD("Введен некорректный период для расчета: "),
+    INVALID_OUTPUT("Введен некорректный вариант вывода: "),
+    KEY_VALUE_MISMATCH("Не у всех ключей указаны значения"),
+    MULTIPLE_CURRENCIES_GRAPH("Для расчета курса по нескольким валютам используйте ключ -output graph");
+
 
     private final String message;
 

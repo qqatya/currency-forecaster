@@ -9,29 +9,30 @@ import java.util.Map;
 public enum ForecastRange {
     TOMORROW("tomorrow", 1),
     WEEK("week", 7),
+    MONTH("month", 30),
     DEF("def", 0);
 
-    private final String command;
+    private final String commandPart;
     private final int day;
     public static final Map<String, ForecastRange> map;
 
     static {
         map = new HashMap<>();
         for (ForecastRange v : ForecastRange.values()) {
-            map.put(v.command, v);
+            map.put(v.commandPart, v);
         }
     }
 
-    ForecastRange(String command, int day) {
-        this.command = command;
+    ForecastRange(String commandPart, int day) {
+        this.commandPart = commandPart;
         this.day = day;
     }
 
-    public static ForecastRange findByCommand(String command) {
-        if (!map.containsKey(command)) {
+    public static ForecastRange findByCommand(String commandPart) {
+        if (!map.containsKey(commandPart)) {
             return DEF;
         }
-        return map.get(command);
+        return map.get(commandPart);
     }
 
     public int getDay() {

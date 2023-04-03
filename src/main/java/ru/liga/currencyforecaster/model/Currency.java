@@ -1,11 +1,16 @@
 package ru.liga.currencyforecaster.model;
 
+import ru.liga.currencyforecaster.model.type.CurrencyType;
+import ru.liga.currencyforecaster.model.type.KeyType;
+
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Сущность для хранения данных из CSV-файлов со статистикой курсов валют
@@ -15,9 +20,9 @@ public class Currency {
     private final int nominal;
     private final LocalDate date;
     private final BigDecimal rate;
-    private final String currencyType;
+    private final CurrencyType currencyType;
 
-    public Currency(int nominal, LocalDate date, BigDecimal rate, String currencyType) {
+    public Currency(int nominal, LocalDate date, BigDecimal rate, CurrencyType currencyType) {
         this.nominal = nominal;
         this.date = date;
         this.rate = rate;
@@ -36,7 +41,7 @@ public class Currency {
         return rate;
     }
 
-    public String getCurrencyType() {
+    public CurrencyType getCurrencyType() {
         return currencyType;
     }
 
@@ -50,7 +55,7 @@ public class Currency {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false; // можно оформить и так
+        if (obj == null || getClass() != obj.getClass()) return false;
         Currency currency = (Currency) obj;
 
         return Objects.equals(date, currency.date);

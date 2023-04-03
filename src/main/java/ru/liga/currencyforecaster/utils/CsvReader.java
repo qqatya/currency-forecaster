@@ -16,8 +16,8 @@ public class CsvReader {
      * @param currencyType Тип валюты
      * @return Потоковое представление файла
      */
-    public static InputStream loadFileByCurrency(CurrencyType currencyType) {
-        return CurrencyForecasterApp.class.getClassLoader().getResourceAsStream(currencyType.getFilePath());
+    public static InputStream loadFileByPath(String path) {
+        return CurrencyForecasterApp.class.getClassLoader().getResourceAsStream(path);
     }
 
     /**

@@ -2,28 +2,42 @@ package ru.liga.currencyforecaster.model;
 
 import ru.liga.currencyforecaster.model.type.CommandType;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
-import ru.liga.currencyforecaster.model.type.ForecastRange;
+import ru.liga.currencyforecaster.model.type.KeyType;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class Command {
     private final CommandType type;
-    private final CurrencyType currency;
-    private final ForecastRange range;
+    private final Set<CurrencyType> currency;
+    private final Map<KeyType, String> keys;
 
-    public Command(CommandType type, CurrencyType currency, ForecastRange range) {
+    public Command(CommandType type, Set<CurrencyType> currency, Map<KeyType, String> keys) {
         this.type = type;
         this.currency = currency;
-        this.range = range;
+        this.keys = keys;
+    }
+
+    public static Command getDefaultCommand() {
+        Set<CurrencyType> tempCur = new HashSet<>();
+        Map<KeyType, String> tempKeys = new HashMap();
+
+        tempCur.add(CurrencyType.DEF);
+        tempKeys.put(KeyType.DEF, "");
+        return new Command(CommandType.DEF, tempCur, tempKeys);
     }
 
     public CommandType getType() {
         return type;
     }
 
-    public CurrencyType getCurrency() {
+    public Set<CurrencyType> getCurrency() {
         return currency;
     }
 
-    public ForecastRange getRange() {
-        return range;
+    public Map<KeyType, String> getKeys() {
+        return keys;
     }
 }

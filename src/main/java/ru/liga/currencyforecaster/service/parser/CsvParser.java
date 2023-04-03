@@ -1,6 +1,7 @@
 package ru.liga.currencyforecaster.service.parser;
 
 import ru.liga.currencyforecaster.model.Currency;
+import ru.liga.currencyforecaster.model.type.CurrencyType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -54,10 +55,10 @@ public class CsvParser {
      */
     private static Currency convertStringToCurrency(String value) {
         String[] split = value.split(";");
-        int nominal = Integer.parseInt(split[NOMINAL_INDEX]);
+        int nominal = Integer.parseInt(split[NOMINAL_INDEX].replaceAll("\\s", ""));
         LocalDate date = LocalDate.parse(split[DATE_INDEX], FORMATTER);
         BigDecimal rate = new BigDecimal(split[RATE_INDEX].replace(',', '.'));
-        String currencyType = split[CURRENCY_TYPE_INDEX];
+        CurrencyType currencyType = CurrencyType.findByCurrencyName(split[CURRENCY_TYPE_INDEX]);
 
         return new Currency(nominal, date, rate, currencyType);
     }
