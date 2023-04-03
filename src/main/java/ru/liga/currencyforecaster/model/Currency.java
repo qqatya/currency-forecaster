@@ -1,19 +1,16 @@
 package ru.liga.currencyforecaster.model;
 
 import ru.liga.currencyforecaster.model.type.CurrencyType;
-import ru.liga.currencyforecaster.model.type.KeyType;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 /**
- * Сущность для хранения данных из CSV-файлов со статистикой курсов валют
+ * Класс для хранения данных из CSV-файлов со статистикой курсов валют
  */
 public class Currency {
     public static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat("E dd.MM.yyyy");

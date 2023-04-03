@@ -6,8 +6,15 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс-парсер курсов валют для расчета по алгоритму линейной регрессии
+ */
 public class RegressionParser {
-
+    /**
+     * Парсинг дней (x)
+     * @param currencies Список курсов валют
+     * @return Список дней
+     */
     public static List<Double> parseDays(List<Currency> currencies) {
         List<Double> days = new ArrayList<>();
         LocalDate dateToCompare = currencies.get(0).getDate().minusMonths(1);
@@ -29,6 +36,11 @@ public class RegressionParser {
         return days;
     }
 
+    /**
+     * Парсинг курсов (y)
+     * @param currencies Список объектов, содержащиъ курсы валют
+     * @return Список курсов валют
+     */
     public static List<Double> parseRates(List<Currency> currencies) {
         List<Double> rates = new ArrayList<>();
         LocalDate dateToCompare = currencies.get(0).getDate().minusMonths(1);

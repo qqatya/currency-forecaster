@@ -2,8 +2,6 @@ package ru.liga.currencyforecaster.service.telegram;
 
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -14,37 +12,19 @@ import ru.liga.currencyforecaster.model.Answer;
 public final class Bot extends TelegramLongPollingCommandBot {
     private final String BOT_NAME;
     private final String BOT_TOKEN;
-
-    //Класс для обработки сообщений, не являющихся командой
-    private final NonCommand nonCommand;
+    private final StringCommand stringCommand;
 
     public Bot(String botName, String botToken) {
         super();
         this.BOT_NAME = botName;
         this.BOT_TOKEN = botToken;
-        //создаём вспомогательный класс для работы с сообщениями, не являющимися командами
-        this.nonCommand = new NonCommand();
-        //регистрируем команды
-        //register(new StartCommand("start", "Старт"));
+        this.stringCommand = new StringCommand();
     }
 
     public static void startBot() {
-        final String token = "5579562082:AAEY2ZpdxPJg9hPvuiULEnhzTo4v3v0UrXI";
-
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new Bot("CurrencyForecaster", token));
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        final String token = "5579562082:AAEY2ZpdxPJg9hPvuiULEnhzTo4v3v0UrXI";
-
-        try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new Bot("currencyforecaster_bot", token));
+            botsApi.registerBot(new Bot("CurrencyForecaster", "token"));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -61,7 +41,7 @@ public final class Bot extends TelegramLongPollingCommandBot {
     }
 
     /**
-     * Ответ на запрос, не являющийся командой
+     * Ответ на запрос с командой в строчном формате
      */
     @Override
     public void processNonCommandUpdate(Update update) {
@@ -70,7 +50,7 @@ public final class Bot extends TelegramLongPollingCommandBot {
         String userName = getUserName(msg);
 
 
-        Answer answer = nonCommand.nonCommandExecute(chatId, userName, msg.getText());
+        Answer answer = stringCommand.stringCommandExecute(chatId, userName, msg.getText());
         setAnswer(answer);
     }
 
@@ -88,14 +68,9 @@ public final class Bot extends TelegramLongPollingCommandBot {
     /**
      * Отправка ответа
      *
-     * @param chatId   id чата
-     * @param userName имя пользователя
-     * @param text     текст ответа
+     * @param answer Объект с данными по ответу
      */
     private void setAnswer(Answer answer) {
-        //SendMessage answer = new SendMessage();
-        /*answer.setText(text);
-        answer.setChatId(chatId.toString());*/
         try {
             System.out.println("send answer");
             if (answer.getGraph()) {
@@ -104,7 +79,6 @@ public final class Bot extends TelegramLongPollingCommandBot {
                 execute(answer.getMessage());
             }
         } catch (TelegramApiException e) {
-            //логируем сбой Telegram Bot API, используя userName
             e.printStackTrace();
         }
     }

@@ -68,16 +68,6 @@ public class CommandValidator {
         return ifExists;
     }
 
-    /*private boolean validateDaysAmount(String value) {
-        int daysAmount = ForecastRange.findByCommand(value).getDay();
-
-        if (daysAmount == 0) {
-            errorMessage = UNAVAILABLE_DAYS_AMOUNT.getMessage();
-            return false;
-        }
-        return true;
-    }*/
-
     private boolean validateKeys(String[] command, String currency) {
         Map<KeyType, String> keys = new HashMap<>();
 

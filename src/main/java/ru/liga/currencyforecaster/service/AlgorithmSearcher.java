@@ -6,6 +6,9 @@ import ru.liga.currencyforecaster.service.impl.ForecastAlgorithmFromInternet;
 import ru.liga.currencyforecaster.service.impl.ForecastAlgorithmLastYear;
 import ru.liga.currencyforecaster.service.impl.ForecastAlgorithmMystical;
 
+/**
+ * Поиск алгоритма расчета
+ */
 public class AlgorithmSearcher {
     public ForecastAlgorithm getForecastAlgorithm(AlgorithmType type) {
         switch (type) {

@@ -1,7 +1,6 @@
 package ru.liga.currencyforecaster.utils;
 
 import ru.liga.currencyforecaster.CurrencyForecasterApp;
-import ru.liga.currencyforecaster.model.type.CurrencyType;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public class CsvReader {
     /**
      * Поиск файла со статистикой по типу валюты
      *
-     * @param currencyType Тип валюты
+     * @param path Путь до файла
      * @return Потоковое представление файла
      */
     public static InputStream loadFileByPath(String path) {

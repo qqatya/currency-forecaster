@@ -3,12 +3,15 @@ package ru.liga.currencyforecaster.model;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 
+/**
+ * Класс ответов телеграм-бота
+ */
 public class Answer {
     private final Long chatId;
     private final String userName;
+    private final Boolean isGraph;
     private SendMessage message;
     private SendPhoto photo;
-    private final Boolean isGraph;
 
     public Answer(Long chatId, String userName, SendPhoto photo) {
         this.chatId = chatId;

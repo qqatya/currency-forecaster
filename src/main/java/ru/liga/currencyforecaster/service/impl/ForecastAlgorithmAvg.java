@@ -15,16 +15,7 @@ public class ForecastAlgorithmAvg implements ForecastAlgorithm {
      * Количество записей в файле, по которым расчитывается прогноз
      */
     private static final int RECORDS_AMOUNT = 7;
-    /**
-     * Расчет прогноза на N дней
-     *
-     * @param currencies Список сущностей, по которым ведется расчет
-     * @param daysAmount Количество дней, на которые нужно рассчитать курс
-     * @return Результат прогноза
-     */
-    //TODO Сделать функциональный интерфейс на метод predictRateForNextDay?
-    // И один класс с predictRateForSomeDays, куда передаем интерфейс для вызова нужного метода
-    // Если делать интерфейс, реализации положить в папку impl
+
     @Override
     public List<Currency> predictRateForSomeDays(List<Currency> currencies,
                                                  LocalDate startDate,
@@ -42,12 +33,6 @@ public class ForecastAlgorithmAvg implements ForecastAlgorithm {
         return ratesResult;
     }
 
-    /**
-     * Расчет прогноза на следующий день
-     *
-     * @param currencies Список сущностей, по которым ведется расчет
-     * @return Результат прогноза
-     */
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
         BigDecimal rateSum = new BigDecimal(0);
         BigDecimal daysAmount = new BigDecimal(RECORDS_AMOUNT);

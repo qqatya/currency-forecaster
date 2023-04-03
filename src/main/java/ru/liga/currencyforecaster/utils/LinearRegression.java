@@ -1,10 +1,5 @@
 package ru.liga.currencyforecaster.utils;
 
-import ru.liga.currencyforecaster.model.type.CurrencyType;
-import ru.liga.currencyforecaster.service.parser.CsvParser;
-import ru.liga.currencyforecaster.service.parser.RegressionParser;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -104,24 +99,6 @@ public class LinearRegression {
     }
 
     /**
-     * Returns the standard error of the estimate for the intercept.
-     *
-     * @return the standard error of the estimate for the intercept
-     */
-    public double interceptStdErr() {
-        return Math.sqrt(svar0);
-    }
-
-    /**
-     * Returns the standard error of the estimate for the slope.
-     *
-     * @return the standard error of the estimate for the slope
-     */
-    public double slopeStdErr() {
-        return Math.sqrt(svar1);
-    }
-
-    /**
      * Returns the expected response {@code y} given the value of the predictor
      * variable {@code x}.
      *
@@ -143,24 +120,7 @@ public class LinearRegression {
     public String toString() {
         StringBuilder s = new StringBuilder();
         s.append(String.format("%.2f n + %.2f", slope(), intercept()));
-        s.append("  (R^2 = " + String.format("%.3f", R2()) + ")");
+        s.append("  (R^2 = ").append(String.format("%.3f", R2())).append(")");
         return s.toString();
     }
-
-    /*public static void main(String[] args) {
-        List<Double> x = RegressionParser.parseDays(CsvParser.parseFile(CsvReader.
-                readFromFile(CsvReader.loadFileByCurrency(CurrencyType.TRY), 30)));
-        List<Double> y = RegressionParser.parseRates(CsvParser.parseFile(CsvReader.
-                readFromFile(CsvReader.loadFileByCurrency(CurrencyType.TRY), 30)));
-        LinearRegression forecaster = new LinearRegression(x, y);
-
-        System.out.println(forecaster.predict(91));
-        System.out.println(forecaster.predict(92));
-        System.out.println(forecaster.predict(93));
-        System.out.println(forecaster.predict(94));
-        System.out.println(forecaster.predict(95));
-        System.out.println(forecaster.predict(96));
-        System.out.println(forecaster.predict(97));
-    }*/
-
 }

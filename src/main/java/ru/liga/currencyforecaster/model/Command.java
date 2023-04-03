@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Класс для хранения команды
+ */
 public class Command {
     private final CommandType type;
     private final Set<CurrencyType> currency;

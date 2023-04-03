@@ -10,14 +10,6 @@ import java.util.List;
 import java.util.Random;
 
 public class ForecastAlgorithmMystical implements ForecastAlgorithm {
-    /**
-     * Расчет прогноза на N дней
-     *
-     * @param currencies Список сущностей, по которым ведется расчет
-     * @param startDate  Дата, с которой начинается расчет
-     * @param daysAmount Количество дней, на которые нужно рассчитать курс
-     * @return Результат прогноза
-     */
     @Override
     public List<Currency> predictRateForSomeDays(List<Currency> currencies,
                                                  LocalDate startDate,
@@ -42,13 +34,6 @@ public class ForecastAlgorithmMystical implements ForecastAlgorithm {
         return ratesResult;
     }
 
-    /**
-     * Поиск рандомного курса за прошлые календарные дни
-     *
-     * @param currencies Список сущностей, по которым ведется расчет
-     * @param date       Дата, по которой ведется расчет календарных дней
-     * @return Результат поиска
-     */
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
         Currency temp;
         Random random = new Random();
@@ -62,12 +47,6 @@ public class ForecastAlgorithmMystical implements ForecastAlgorithm {
         return currencies.get(currencies.indexOf(temp));
     }
 
-    /**
-     * Поиск интервала лет по считанным из файла значениям
-     *
-     * @param currencies Список сущностей, по которым ведется расчет
-     * @return Интервал лет
-     */
     private int findYearsAmount(List<Currency> currencies) {
         int firstYear = currencies.get(0).getDate().getYear();
         int lastYear = currencies.get(currencies.size() - 1).getDate().getYear();

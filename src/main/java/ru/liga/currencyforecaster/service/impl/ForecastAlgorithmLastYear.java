@@ -9,14 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ForecastAlgorithmLastYear implements ForecastAlgorithm {
-    /**
-     * Расчет прогноза на N дней
-     *
-     * @param currencies Список сущностей, по которым ведется расчет
-     * @param startDate  Дата, с которой начинается расчет
-     * @param daysAmount Количество дней, на которые нужно рассчитать курс
-     * @return Результат прогноза
-     */
     @Override
     public List<Currency> predictRateForSomeDays(List<Currency> currencies,
                                                  LocalDate startDate,
@@ -37,13 +29,6 @@ public class ForecastAlgorithmLastYear implements ForecastAlgorithm {
         return ratesResult;
     }
 
-    /**
-     * Поиск курса за прошлый год
-     *
-     * @param currencies Список сущностей, по которым ведется расчет
-     * @param date       Дата, по которой нужно найти курс в прошлом году
-     * @return Результат поиска
-     */
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
         Currency temp = new Currency(1, date.minusYears(1), null, CurrencyType.DEF);
         int daysIncrement = 1;

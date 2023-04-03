@@ -12,13 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ForecastAlgorithmFromInternet implements ForecastAlgorithm {
-    /**
-     * Расчет прогноза на N дней
-     *
-     * @param currencies Список сущностей, по которым ведется расчет
-     * @param daysAmount Количество дней, на которые нужно рассчитать курс
-     * @return Результат прогноза
-     */
     @Override
     public List<Currency> predictRateForSomeDays(List<Currency> currencies,
                                                  LocalDate startDate,
@@ -35,12 +28,6 @@ public class ForecastAlgorithmFromInternet implements ForecastAlgorithm {
         return ratesResult;
     }
 
-    /**
-     * Расчет прогноза на следующий день
-     *
-     * @param currencies Список сущностей, по которым ведется расчет
-     * @return Результат прогноза
-     */
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
         int nominal = currencies.get(0).getNominal();
         CurrencyType currencyType = currencies.get(0).getCurrencyType();

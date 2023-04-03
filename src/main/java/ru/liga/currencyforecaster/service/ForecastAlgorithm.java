@@ -6,5 +6,13 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface ForecastAlgorithm {
-    public List<Currency> predictRateForSomeDays(List<Currency> currencies, LocalDate startDate, int daysAmount);
+    /**
+     * Расчет прогноза на N дней
+     *
+     * @param currencies Список сущностей, по которым ведется расчет
+     * @param startDate  Дата начала прогноза
+     * @param daysAmount Количество дней, на которые нужно рассчитать курс
+     * @return Результат прогноза
+     */
+    List<Currency> predictRateForSomeDays(List<Currency> currencies, LocalDate startDate, int daysAmount);
 }

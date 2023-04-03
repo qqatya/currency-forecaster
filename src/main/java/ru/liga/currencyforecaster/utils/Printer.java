@@ -7,7 +7,7 @@ import java.util.List;
 
 import static ru.liga.currencyforecaster.model.type.ConsoleMessage.*;
 
-public class ConsolePrinter {
+public class Printer {
     public static String printCurrencies() {
         StringBuilder values = new StringBuilder();
         values.append(NOTIFY_ABOUT_CURRENCIES.getMessage());
