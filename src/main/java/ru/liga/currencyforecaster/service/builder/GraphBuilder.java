@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.service.builder;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYDataset;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * Класс для создания графиков
  */
+@Slf4j
 public class GraphBuilder {
     private final JFreeChart xYLineChart;
     private final String title;
@@ -27,6 +29,7 @@ public class GraphBuilder {
                 "Дни",
                 "Курс",
                 createDataset(currencies));
+        log.debug("Built XYchart for graph");
     }
 
     public JFreeChart getXYLineChart() {

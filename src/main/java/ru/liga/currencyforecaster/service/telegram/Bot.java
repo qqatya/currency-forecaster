@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.service.telegram;
 
+import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.extensions.bots.commandbot.TelegramLongPollingCommandBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -9,6 +10,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.liga.currencyforecaster.model.Answer;
 
+@Slf4j
 public final class Bot extends TelegramLongPollingCommandBot {
     private final String BOT_NAME;
     private final String BOT_TOKEN;
@@ -22,9 +24,11 @@ public final class Bot extends TelegramLongPollingCommandBot {
     }
 
     public static void startBot() {
+        final String BOT_TOKEN = System.getenv("BOT_TOKEN");
+
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new Bot("CurrencyForecaster", "token"));
+            botsApi.registerBot(new Bot("CurrencyForecaster", BOT_TOKEN));
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
@@ -48,9 +52,10 @@ public final class Bot extends TelegramLongPollingCommandBot {
         Message msg = update.getMessage();
         Long chatId = msg.getChatId();
         String userName = getUserName(msg);
-
-
+        log.info("Received an update for chatId: {}", chatId);
         Answer answer = stringCommand.stringCommandExecute(chatId, userName, msg.getText());
+        log.debug("Finished processing forecast: isGraph = {}", answer.getIsGraph());
+        log.info("Sending answer for chatId: {}", chatId);
         setAnswer(answer);
     }
 
@@ -72,14 +77,16 @@ public final class Bot extends TelegramLongPollingCommandBot {
      */
     private void setAnswer(Answer answer) {
         try {
-            System.out.println("send answer");
             if (answer.getIsGraph()) {
+                log.debug("Sending graph");
                 execute(answer.getPhoto());
             } else {
+                log.debug("Sending message");
                 execute(answer.getMessage());
             }
+            log.info("Successfully sent the answer");
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.error("An error occurred while sending the answer: {}", e.getMessage());
         }
     }
 }

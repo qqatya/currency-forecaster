@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.service.builder;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jfree.chart.ChartUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
@@ -22,70 +23,82 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+@Slf4j
 public class ForecastBuilder {
+    private int targetDaysAmount;
+    private LocalDate startDate;
+    private AlgorithmType algorithmType;
+
+    public ForecastBuilder(Command command) {
+        this.startDate = LocalDate.now().plusDays(1);
+        this.targetDaysAmount = 1;
+
+        for (Map.Entry<KeyType, String> entry : command.getKeys().entrySet()) {
+            if (ForecastRange.findByCommand(entry.getValue()) != ForecastRange.DEF) {
+                this.targetDaysAmount = ForecastRange.findByCommand(entry.getValue()).getDay();
+            }
+            if (entry.getKey() == KeyType.DATE) {
+                this.startDate = findStartDate(entry.getValue());
+            }
+            if (AlgorithmType.findByCommand(entry.getValue()) != AlgorithmType.DEF) {
+                this.algorithmType = AlgorithmType.findByCommand(entry.getValue());
+            }
+        }
+    }
+
     /**
      * Создание списка сущностей с прогнозом курсов валют по типу валюты и количеству дней для прогноза
      *
-     * @param command Команда пользователя
+     * @param currencies Валюты из команды
      * @return Список сущностей с прогнозом курсов валют
      */
-    public static List<Currency> createResultRates(Command command) {
-        int targetDaysAmount = 1;
-        LocalDate startDate = LocalDate.now().plusDays(1);
-        Map<KeyType, String> keys = command.getKeys();
-        AlgorithmType algorithmType = AlgorithmType.DEF;
+    public List<Currency> createResultRates(Set<CurrencyType> currencies) {
+        List<Currency> forecastPattern = getCurrenciesByType(currencies);
 
-        for (Map.Entry<KeyType, String> entry : keys.entrySet()) {
-            if (ForecastRange.findByCommand(entry.getValue()) != ForecastRange.DEF) {
-                targetDaysAmount = ForecastRange.findByCommand(entry.getValue()).getDay();
-            }
-            if (entry.getKey() == KeyType.DATE) {
-                startDate = findStartDate(entry.getValue());
-            }
-            if (AlgorithmType.findByCommand(entry.getValue()) != AlgorithmType.DEF) {
-                algorithmType = AlgorithmType.findByCommand(entry.getValue());
-            }
-        }
-        List<Currency> currencies = getCurrenciesByType(command.getCurrency());
+        log.debug("target days = {}", targetDaysAmount);
         ForecastAlgorithm forecastAlgorithm = AlgorithmFactory.getForecastAlgorithm(algorithmType);
 
-        return forecastAlgorithm.predictRateForSomeDays(currencies, startDate,
+        return forecastAlgorithm.predictRateForSomeDays(forecastPattern, startDate,
                 targetDaysAmount);
     }
 
     /**
      * Создание графика в формате изображения
      *
-     * @param chatId  Идентификатор чата с ботом
-     * @param command Введенная команда
+     * @param chatId     Идентификатор чата с ботом
+     * @param currencies Валюты из команды
      * @return Изображение графа
      */
-    public static SendPhoto getGraph(Long chatId, Command command) {
+    public SendPhoto getGraph(Long chatId, Set<CurrencyType> currencies) {
         List<String> paths = new ArrayList<>();
-        List<Currency>[] currencies = new List[command.getCurrency().size()];
+        List<Currency>[] forecastPattern = new List[currencies.size()];
 
-        for (CurrencyType currency : command.getCurrency()) {
+        for (CurrencyType currency : currencies) {
             paths.add(currency.getFilePath());
         }
+        ForecastAlgorithm forecastAlgorithm = AlgorithmFactory.getForecastAlgorithm(algorithmType);
 
         for (int i = 0; i < paths.size(); i++) {
-            currencies[i] = CsvParser.parseFile(CsvReader.
-                    readFromFile(CsvReader.loadFileByPath(paths.get(i)),
-                            ForecastRange.findByCommand(command.getKeys().get(KeyType.PERIOD)).getDay()));
-        }
-        GraphBuilder graphBuilder = new GraphBuilder("Прогноз", 560, 367, currencies);
+            List<Currency> temp = CsvParser.parseFile(CsvReader.
+                    readAllFromFile(CsvReader.loadFileByPath(paths.get(i))));
 
+            forecastPattern[i] = forecastAlgorithm.predictRateForSomeDays(temp, startDate,
+                    targetDaysAmount);
+        }
+        GraphBuilder graphBuilder = new GraphBuilder("Прогноз", 560, 367, forecastPattern);
+
+        log.debug("Built graph");
         return getGraphPicture(chatId, graphBuilder);
     }
 
-    private static LocalDate findStartDate(String value) {
+    private LocalDate findStartDate(String value) {
         if (ForecastRange.findByCommand(value) == ForecastRange.TOMORROW) {
             return LocalDate.now().plusDays(1);
         }
         return LocalDate.parse(value, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 
-    private static List<Currency> getCurrenciesByType(Set<CurrencyType> currencyTypes) {
+    private List<Currency> getCurrenciesByType(Set<CurrencyType> currencyTypes) {
         String path = "";
         for (CurrencyType currency : currencyTypes) {
             path = currency.getFilePath();
@@ -93,7 +106,7 @@ public class ForecastBuilder {
         return CsvParser.parseFile(CsvReader.readAllFromFile(CsvReader.loadFileByPath(path)));
     }
 
-    private static SendPhoto getGraphPicture(Long chatId, GraphBuilder graphBuilder) {
+    private SendPhoto getGraphPicture(Long chatId, GraphBuilder graphBuilder) {
         SendPhoto message = new SendPhoto();
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             ChartUtils.writeChartAsPNG(out,

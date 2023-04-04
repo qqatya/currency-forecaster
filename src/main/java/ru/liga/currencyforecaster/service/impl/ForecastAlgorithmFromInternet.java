@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class ForecastAlgorithmFromInternet implements ForecastAlgorithm {
     @Override
     public List<Currency> predictRateForSomeDays(List<Currency> currencies,
@@ -25,6 +27,7 @@ public class ForecastAlgorithmFromInternet implements ForecastAlgorithm {
             ratesResult.add(currency);
             tmpCurrencies.add(0, currency);
         }
+        log.debug("Built linear regression rates");
         return ratesResult;
     }
 

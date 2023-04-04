@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.service.parser;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 
@@ -9,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class CsvParser {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
@@ -44,6 +46,7 @@ public class CsvParser {
         for (String line : lines) {
             currencies.add(convertStringToCurrency(line));
         }
+        log.debug("Successfully converted lines to currencies");
         return currencies;
     }
 

@@ -2,6 +2,7 @@ package ru.liga.currencyforecaster.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 import ru.liga.currencyforecaster.model.type.CommandType;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.model.type.KeyType;
@@ -16,6 +17,7 @@ import java.util.Set;
  */
 @AllArgsConstructor
 @Getter
+@ToString
 public class Command {
     private final CommandType type;
     private final Set<CurrencyType> currency;

@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@Slf4j
 public class ForecastAlgorithmMystical implements ForecastAlgorithm {
     @Override
     public List<Currency> predictRateForSomeDays(List<Currency> currencies,
@@ -20,6 +22,7 @@ public class ForecastAlgorithmMystical implements ForecastAlgorithm {
         for (int i = 0; i < daysAmount; i++) {
             LocalDate rateDate = startDate.plusDays(i);
             if (!ifDateExists(tmpCurrencies, rateDate)) {
+                log.warn("Date {} does not exist", rateDate);
                 continue;
             }
             Currency lastYearRete = predictRateForNextDay(tmpCurrencies, rateDate);
@@ -31,6 +34,7 @@ public class ForecastAlgorithmMystical implements ForecastAlgorithm {
             ratesResult.add(newRate);
 
         }
+        log.debug("Built mist rates");
         return ratesResult;
     }
 

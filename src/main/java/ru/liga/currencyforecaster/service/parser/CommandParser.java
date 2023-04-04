@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.service.parser;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.model.Command;
 import ru.liga.currencyforecaster.model.type.CommandType;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
@@ -13,6 +14,7 @@ import java.util.Set;
 import static ru.liga.currencyforecaster.model.type.CommandIndex.COMMAND_TYPE_INDEX;
 import static ru.liga.currencyforecaster.model.type.CommandIndex.CURRENCY_TYPE_INDEX;
 
+@Slf4j
 public class CommandParser {
     /**
      * Парсинг команды пользователя в объект Command
@@ -21,14 +23,17 @@ public class CommandParser {
      * @return Объект типа Command
      */
     public static Command parseCommand(String command) {
+        log.debug("Start parsing command");
         String[] parsedCommand = command.split(" ");
         CommandType type = CommandType.findByCommand(parsedCommand[COMMAND_TYPE_INDEX.getIndex()]);
         Map<KeyType, String> tempKeys = parseKeys(parsedCommand);
         Set<CurrencyType> tempCur = parseCurrencies(parsedCommand[CURRENCY_TYPE_INDEX.getIndex()]);
 
         if (type == CommandType.Q || tempKeys.isEmpty() || tempCur.isEmpty()) {
+            log.debug("No keys or currencies match. Built default command");
             return Command.getDefaultCommand();
         }
+        log.debug("Built command");
         return new Command(type, tempCur, tempKeys);
     }
 

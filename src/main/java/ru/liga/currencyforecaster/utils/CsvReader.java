@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.CurrencyForecasterApp;
 
 import java.io.*;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import static ru.liga.currencyforecaster.model.type.ConsoleMessage.IO_EXCEPTION_MESSAGE;
 
+@Slf4j
 public class CsvReader {
     /**
      * Поиск файла со статистикой по типу валюты
@@ -31,12 +33,14 @@ public class CsvReader {
         Reader reader = new InputStreamReader(io);
 
         try (BufferedReader br = new BufferedReader(reader)) {
+            log.debug("Start reading {} lines from file", linesAmount);
             br.readLine();
             for (int i = 0; i < linesAmount; i++) {
                 lines.add(br.readLine());
             }
+            log.debug("Finished reading lines");
         } catch (IOException e) {
-            System.out.println(IO_EXCEPTION_MESSAGE.getMessage());
+            log.error("An error occurred while reading file: {}", IO_EXCEPTION_MESSAGE.getMessage());
         }
         return lines;
     }
@@ -52,12 +56,14 @@ public class CsvReader {
         Reader reader = new InputStreamReader(io);
 
         try (BufferedReader br = new BufferedReader(reader)) {
+            log.debug("Start reading all lines from file");
             br.readLine();
             while (br.ready()) {
                 lines.add(br.readLine());
             }
+            log.debug("Finished reading lines");
         } catch (IOException e) {
-            System.out.println(IO_EXCEPTION_MESSAGE.getMessage());
+            log.error("An error occurred while reading file: {}", IO_EXCEPTION_MESSAGE.getMessage());
         }
         return lines;
     }

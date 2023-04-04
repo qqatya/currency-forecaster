@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
@@ -10,6 +11,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class ForecastAlgorithmAvg implements ForecastAlgorithm {
     /**
      * Количество записей в файле, по которым расчитывается прогноз
@@ -30,6 +32,7 @@ public class ForecastAlgorithmAvg implements ForecastAlgorithm {
             tmpCurrencies.remove(tmpCurrencies.size() - 1);
             tmpCurrencies.add(0, currency);
         }
+        log.debug("Built avg rates: {}", ratesResult.size());
         return ratesResult;
     }
 

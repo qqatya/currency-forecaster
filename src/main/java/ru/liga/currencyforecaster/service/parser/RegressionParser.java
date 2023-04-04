@@ -1,5 +1,6 @@
 package ru.liga.currencyforecaster.service.parser;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.model.Currency;
 
 import java.time.LocalDate;
@@ -9,9 +10,11 @@ import java.util.List;
 /**
  * Класс-парсер курсов валют для расчета по алгоритму линейной регрессии
  */
+@Slf4j
 public class RegressionParser {
     /**
      * Парсинг дней (x)
+     *
      * @param currencies Список курсов валют
      * @return Список дней
      */
@@ -33,11 +36,13 @@ public class RegressionParser {
                 days.add((double) currentDate.getDayOfYear());
             }
         }
+        log.debug("Successfully parsed {} days for linear regression", days.size());
         return days;
     }
 
     /**
      * Парсинг курсов (y)
+     *
      * @param currencies Список объектов, содержащиъ курсы валют
      * @return Список курсов валют
      */
@@ -54,6 +59,7 @@ public class RegressionParser {
                 break;
             }
         }
+        log.debug("Successfully parsed {} rates for linear regression", rates.size());
         return rates;
     }
 }
