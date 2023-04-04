@@ -1,5 +1,7 @@
 package ru.liga.currencyforecaster.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 
 import java.math.BigDecimal;
@@ -12,35 +14,14 @@ import java.util.Objects;
 /**
  * Класс для хранения данных из CSV-файлов со статистикой курсов валют
  */
+@AllArgsConstructor
+@Getter
 public class Currency {
-    public static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat("E dd.MM.yyyy");
+    private static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat("E dd.MM.yyyy");
     private final int nominal;
     private final LocalDate date;
     private final BigDecimal rate;
     private final CurrencyType currencyType;
-
-    public Currency(int nominal, LocalDate date, BigDecimal rate, CurrencyType currencyType) {
-        this.nominal = nominal;
-        this.date = date;
-        this.rate = rate;
-        this.currencyType = currencyType;
-    }
-
-    public int getNominal() {
-        return nominal;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    public CurrencyType getCurrencyType() {
-        return currencyType;
-    }
 
     @Override
     public String toString() {

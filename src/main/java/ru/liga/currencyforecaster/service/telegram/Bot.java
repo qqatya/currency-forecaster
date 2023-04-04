@@ -73,7 +73,7 @@ public final class Bot extends TelegramLongPollingCommandBot {
     private void setAnswer(Answer answer) {
         try {
             System.out.println("send answer");
-            if (answer.getGraph()) {
+            if (answer.getIsGraph()) {
                 execute(answer.getPhoto());
             } else {
                 execute(answer.getMessage());

@@ -13,6 +13,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <telegram.version>6.5.0</telegram.version>
+        <logback.version>1.4.6</logback.version>
     </properties>
 
     <distributionManagement>
@@ -39,6 +40,11 @@
             <artifactId>jfreechart</artifactId>
             <version>1.5.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
+        </dependency>
         <!-- Telegram API -->
         <dependency>
             <groupId>org.telegram</groupId>
@@ -49,6 +55,22 @@
             <groupId>org.telegram</groupId>
             <artifactId>telegrambotsextensions</artifactId>
             <version>${telegram.version}</version>
+        </dependency>
+        <!-- Logging -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.6</version>
         </dependency>
     </dependencies>
 

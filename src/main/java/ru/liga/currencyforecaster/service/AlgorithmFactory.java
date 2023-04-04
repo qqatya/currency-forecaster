@@ -9,12 +9,9 @@ import ru.liga.currencyforecaster.service.impl.ForecastAlgorithmMystical;
 /**
  * Поиск алгоритма расчета
  */
-public class AlgorithmSearcher {
-    public ForecastAlgorithm getForecastAlgorithm(AlgorithmType type) {
+public class AlgorithmFactory {
+    public static ForecastAlgorithm getForecastAlgorithm(AlgorithmType type) {
         switch (type) {
-            case AVG -> {
-                return new ForecastAlgorithmAvg();
-            }
             case MYST -> {
                 return new ForecastAlgorithmMystical();
             }
@@ -25,7 +22,7 @@ public class AlgorithmSearcher {
                 return new ForecastAlgorithmLastYear();
             }
             default -> {
-                return null;
+                return new ForecastAlgorithmAvg();
             }
         }
     }

@@ -9,7 +9,7 @@ import ru.liga.currencyforecaster.model.type.AlgorithmType;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.model.type.ForecastRange;
 import ru.liga.currencyforecaster.model.type.KeyType;
-import ru.liga.currencyforecaster.service.AlgorithmSearcher;
+import ru.liga.currencyforecaster.service.AlgorithmFactory;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 import ru.liga.currencyforecaster.service.parser.CsvParser;
 import ru.liga.currencyforecaster.utils.CsvReader;
@@ -47,8 +47,7 @@ public class ForecastBuilder {
             }
         }
         List<Currency> currencies = getCurrenciesByType(command.getCurrency());
-        AlgorithmSearcher searcher = new AlgorithmSearcher();
-        ForecastAlgorithm forecastAlgorithm = searcher.getForecastAlgorithm(algorithmType);
+        ForecastAlgorithm forecastAlgorithm = AlgorithmFactory.getForecastAlgorithm(algorithmType);
 
         return forecastAlgorithm.predictRateForSomeDays(currencies, startDate,
                 targetDaysAmount);
