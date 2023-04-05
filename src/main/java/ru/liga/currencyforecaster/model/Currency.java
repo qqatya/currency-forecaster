@@ -2,7 +2,6 @@ package ru.liga.currencyforecaster.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 import ru.liga.currencyforecaster.model.type.CurrencyType;
 
 import java.math.BigDecimal;
