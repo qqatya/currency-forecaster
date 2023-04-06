@@ -1,10 +1,10 @@
 package ru.liga.currencyforecaster.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.liga.currencyforecaster.controller.RegressionParsingController;
+import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
-import ru.liga.currencyforecaster.service.parser.RegressionParser;
 import ru.liga.currencyforecaster.utils.LinearRegression;
 
 import java.math.BigDecimal;
@@ -14,6 +14,11 @@ import java.util.List;
 
 @Slf4j
 public class ForecastAlgorithmFromInternet implements ForecastAlgorithm {
+    /**
+     * Индекс объекта Currency, созданного из самой новой записи в csv-файле
+     */
+    private static final int NEWEST_CURRENCY_INDEX = 0;
+
     @Override
     public List<Currency> predictRateForSomeDays(List<Currency> currencies,
                                                  LocalDate startDate,
@@ -32,13 +37,13 @@ public class ForecastAlgorithmFromInternet implements ForecastAlgorithm {
     }
 
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
-        int nominal = currencies.get(0).getNominal();
-        CurrencyType currencyType = currencies.get(0).getCurrencyType();
-        LinearRegression regression = new LinearRegression(RegressionParser.parseDays(currencies),
-                RegressionParser.parseRates(currencies));
+        int nominal = currencies.get(NEWEST_CURRENCY_INDEX).getNominal();
+        CurrencyTypeEnum currencyTypeEnum = currencies.get(NEWEST_CURRENCY_INDEX).getCurrencyType();
+        LinearRegression regression = new LinearRegression(RegressionParsingController.parseDays(currencies),
+                RegressionParsingController.parseRates(currencies));
         BigDecimal nextDayRate = BigDecimal.valueOf(regression.predict(date.getDayOfYear()));
 
-        return new Currency(nominal, date, nextDayRate, currencyType);
+        return new Currency(nominal, date, nextDayRate, currencyTypeEnum);
     }
 
 }

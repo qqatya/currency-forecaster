@@ -1,9 +1,13 @@
-package ru.liga.currencyforecaster.model.type;
+package ru.liga.currencyforecaster.enums;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Строковые константы
  */
-public enum ConsoleMessage {
+@AllArgsConstructor
+public enum MessageEnum {
     NOTIFY_ABOUT_CURRENCIES("Перечень доступных валют:\n"),
     NOTIFY_ABOUT_COMMANDS("Примеры доступных команд:\n"),
     ENTER_COMMAND("Введите команду:"),
@@ -24,14 +28,7 @@ public enum ConsoleMessage {
     KEY_VALUE_MISMATCH("Не у всех ключей указаны значения"),
     MULTIPLE_CURRENCIES_GRAPH("Для расчета курса по нескольким валютам используйте ключ -output graph");
 
-
+    @Getter
     private final String message;
 
-    ConsoleMessage(String messageText) {
-        this.message = messageText;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }

@@ -1,8 +1,8 @@
 package ru.liga.currencyforecaster.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 
 import java.math.BigDecimal;
@@ -17,6 +17,11 @@ public class ForecastAlgorithmAvg implements ForecastAlgorithm {
      * Количество записей в файле, по которым расчитывается прогноз
      */
     private static final int RECORDS_AMOUNT = 7;
+
+    /**
+     * Индекс объекта Currency, созданного из самой новой записи в csv-файле
+     */
+    private static final int NEWEST_CURRENCY_INDEX = 0;
 
     @Override
     public List<Currency> predictRateForSomeDays(List<Currency> currencies,
@@ -40,13 +45,13 @@ public class ForecastAlgorithmAvg implements ForecastAlgorithm {
         BigDecimal rateSum = new BigDecimal(0);
         BigDecimal daysAmount = new BigDecimal(RECORDS_AMOUNT);
         int nominal = currencies.get(0).getNominal();
-        CurrencyType currencyType = currencies.get(0).getCurrencyType();
+        CurrencyTypeEnum currencyTypeEnum = currencies.get(NEWEST_CURRENCY_INDEX).getCurrencyType();
 
         for (int i = 0; i < RECORDS_AMOUNT; i++) {
             rateSum = rateSum.add(currencies.get(i).getRate());
         }
         BigDecimal nextDayRate = rateSum.divide(daysAmount, RoundingMode.HALF_UP);
 
-        return new Currency(nominal, date, nextDayRate, currencyType);
+        return new Currency(nominal, date, nextDayRate, currencyTypeEnum);
     }
 }

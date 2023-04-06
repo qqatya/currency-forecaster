@@ -2,7 +2,8 @@ package ru.liga.currencyforecaster.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import ru.liga.currencyforecaster.model.type.CurrencyType;
+import lombok.ToString;
+import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -16,16 +17,20 @@ import java.util.Objects;
  */
 @AllArgsConstructor
 @Getter
+@ToString
 public class Currency {
     private static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat("E dd.MM.yyyy");
     private final int nominal;
     private final LocalDate date;
     private final BigDecimal rate;
-    private final CurrencyType currencyType;
+    private final CurrencyTypeEnum currencyType;
 
-    @Override
-    public String toString() {
-
+    /**
+     * Получение даты и курса
+     *
+     * @return Строка с отформатированными данными
+     */
+    public String getDayAndRate() {
         return SIMPLE_DATE_FORMATTER.format(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 + " - " + String.format("%.2f", rate);
     }

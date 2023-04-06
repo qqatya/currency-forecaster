@@ -2,13 +2,13 @@ package ru.liga.currencyforecaster.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import ru.liga.currencyforecaster.controller.CommandParsingController;
+import ru.liga.currencyforecaster.enums.OutputTypeEnum;
 import ru.liga.currencyforecaster.model.Answer;
 import ru.liga.currencyforecaster.model.Command;
-import ru.liga.currencyforecaster.model.type.OutputType;
 import ru.liga.currencyforecaster.service.builder.ForecastBuilder;
-import ru.liga.currencyforecaster.service.parser.CommandParser;
-import ru.liga.currencyforecaster.service.validator.CommandValidator;
 import ru.liga.currencyforecaster.utils.Printer;
+import ru.liga.currencyforecaster.validation.CommandValidator;
 
 /**
  * Создание прогноза по команде пользователя
@@ -27,18 +27,18 @@ public class Forecaster {
             return new Answer(chatId, userName, message);
         } else {
             log.info("Command is valid");
-            parsedCommand = CommandParser.parseCommand(command);
+            parsedCommand = CommandParsingController.parseCommand(command);
             log.debug("Successfully parsed command: {}", parsedCommand);
             forecastBuilder = new ForecastBuilder(parsedCommand);
         }
-        if (parsedCommand.getKeys().containsValue(OutputType.GRAPH.getCommandPart())) {
+        if (parsedCommand.getKeys().containsValue(OutputTypeEnum.GRAPH.getCommandPart())) {
             log.debug("Building graph");
-            return new Answer(chatId, userName, forecastBuilder.getGraph(chatId, parsedCommand.getCurrency()));
+            return new Answer(chatId, userName, forecastBuilder.getGraph(chatId, parsedCommand.getCurrencies()));
         } else {
             log.debug("Building list");
             SendMessage message = new SendMessage();
 
-            message.setText(Printer.printResult(forecastBuilder.createResultRates(parsedCommand.getCurrency())));
+            message.setText(Printer.printResult(forecastBuilder.createResultRates(parsedCommand.getCurrencies())));
             message.setChatId(chatId);
             return new Answer(chatId, userName, message);
         }

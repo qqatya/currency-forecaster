@@ -1,5 +1,7 @@
 package ru.liga.currencyforecaster.utils;
 
+import lombok.Getter;
+
 import java.util.List;
 
 /**
@@ -17,9 +19,14 @@ import java.util.List;
  * @author Kevin Wayne
  */
 public class LinearRegression {
-    private final double intercept, slope;
+    @Getter
+    private final double intercept;
+    @Getter
+    private final double slope;
+    @Getter
     private final double r2;
-    private final double svar0, svar1;
+    private final double svar0;
+    private final double svar1;
 
     /**
      * Performs a linear regression on the data points {@code (y.get(i), x[i])}.
@@ -71,34 +78,6 @@ public class LinearRegression {
     }
 
     /**
-     * Returns the <em>y</em>-intercept &alpha; of the best of the best-fit line <em>y</em> = &alpha; + &beta; <em>x</em>.
-     *
-     * @return the <em>y</em>-intercept &alpha; of the best-fit line <em>y = &alpha; + &beta; x</em>
-     */
-    public double intercept() {
-        return intercept;
-    }
-
-    /**
-     * Returns the slope &beta; of the best of the best-fit line <em>y</em> = &alpha; + &beta; <em>x</em>.
-     *
-     * @return the slope &beta; of the best-fit line <em>y</em> = &alpha; + &beta; <em>x</em>
-     */
-    public double slope() {
-        return slope;
-    }
-
-    /**
-     * Returns the coefficient of determination <em>R</em><sup>2</sup>.
-     *
-     * @return the coefficient of determination <em>R</em><sup>2</sup>,
-     * which is a real number between 0 and 1
-     */
-    public double R2() {
-        return r2;
-    }
-
-    /**
      * Returns the expected response {@code y} given the value of the predictor
      * variable {@code x}.
      *
@@ -119,8 +98,8 @@ public class LinearRegression {
      */
     public String toString() {
         StringBuilder s = new StringBuilder();
-        s.append(String.format("%.2f n + %.2f", slope(), intercept()));
-        s.append("  (R^2 = ").append(String.format("%.3f", R2())).append(")");
+        s.append(String.format("%.2f n + %.2f", getSlope(), getIntercept()));
+        s.append("  (R^2 = ").append(String.format("%.3f", getR2())).append(")");
         return s.toString();
     }
 }

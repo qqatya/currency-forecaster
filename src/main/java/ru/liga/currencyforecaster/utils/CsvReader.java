@@ -1,69 +1,46 @@
 package ru.liga.currencyforecaster.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.liga.currencyforecaster.CurrencyForecasterApp;
 
-import java.io.*;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-
-import static ru.liga.currencyforecaster.model.type.ConsoleMessage.IO_EXCEPTION_MESSAGE;
 
 @Slf4j
 public class CsvReader {
     /**
      * Поиск файла со статистикой по типу валюты
      *
-     * @param path Путь до файла
+     * @param fileName Название файла
      * @return Потоковое представление файла
      */
-    public static InputStream loadFileByPath(String path) {
-        return CurrencyForecasterApp.class.getClassLoader().getResourceAsStream(path);
-    }
-
-    /**
-     * Построчное чтение определенного количества строк из потока
-     *
-     * @param io          Поток для чтения файла
-     * @param linesAmount Количество строк, которое нужно считать
-     * @return Список считанных строк
-     */
-    public static List<String> readFromFile(InputStream io, int linesAmount) {
-        List<String> lines = new ArrayList<>();
-        Reader reader = new InputStreamReader(io);
-
-        try (BufferedReader br = new BufferedReader(reader)) {
-            log.debug("Start reading {} lines from file", linesAmount);
-            br.readLine();
-            for (int i = 0; i < linesAmount; i++) {
-                lines.add(br.readLine());
-            }
-            log.debug("Finished reading lines");
-        } catch (IOException e) {
-            log.error("An error occurred while reading file: {}", IO_EXCEPTION_MESSAGE.getMessage());
+    public static Path getFilePath(String fileName) {
+        try {
+            return Path.of(ClassLoader.getSystemResource(fileName).toURI());
+        } catch (URISyntaxException e) {
+            log.error("File not found: {}", fileName);
         }
-        return lines;
+        return null;
     }
 
     /**
      * Построчное чтение всех строк из потока
      *
-     * @param io Поток для чтения файла
+     * @param path Путь до файла
      * @return Список считанных строк
      */
-    public static List<String> readAllFromFile(InputStream io) {
+    public static List<String> readAllFromFile(Path path) {
         List<String> lines = new ArrayList<>();
-        Reader reader = new InputStreamReader(io);
 
-        try (BufferedReader br = new BufferedReader(reader)) {
-            log.debug("Start reading all lines from file");
-            br.readLine();
-            while (br.ready()) {
-                lines.add(br.readLine());
-            }
+        log.debug("Start reading all lines from file {}", path.getFileName());
+        try {
+            lines = Files.readAllLines(path);
             log.debug("Finished reading lines");
         } catch (IOException e) {
-            log.error("An error occurred while reading file: {}", IO_EXCEPTION_MESSAGE.getMessage());
+            log.error("An error occurred while reading file: {}", e.getMessage());
         }
         return lines;
     }

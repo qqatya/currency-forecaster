@@ -1,8 +1,8 @@
 package ru.liga.currencyforecaster.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 
 import java.time.LocalDate;
@@ -12,6 +12,11 @@ import java.util.Random;
 
 @Slf4j
 public class ForecastAlgorithmMystical implements ForecastAlgorithm {
+    /**
+     * Индекс объекта Currency, созданного из самой новой записи в csv-файле
+     */
+    private static final int NEWEST_CURRENCY_INDEX = 0;
+
     @Override
     public List<Currency> predictRateForSomeDays(List<Currency> currencies,
                                                  LocalDate startDate,
@@ -41,18 +46,19 @@ public class ForecastAlgorithmMystical implements ForecastAlgorithm {
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
         Currency temp;
         Random random = new Random();
+        int defaultValue = 1;
 
         do {
             int yearsAmount = random.nextInt(findYearsAmount(currencies));
 
-            temp = new Currency(1, date.minusYears(yearsAmount),
-                    null, CurrencyType.DEF);
+            temp = new Currency(defaultValue, date.minusYears(yearsAmount),
+                    null, CurrencyTypeEnum.DEF);
         } while (!currencies.contains(temp));
         return currencies.get(currencies.indexOf(temp));
     }
 
     private int findYearsAmount(List<Currency> currencies) {
-        int firstYear = currencies.get(0).getDate().getYear();
+        int firstYear = currencies.get(NEWEST_CURRENCY_INDEX).getDate().getYear();
         int lastYear = currencies.get(currencies.size() - 1).getDate().getYear();
 
         return firstYear - lastYear;

@@ -1,10 +1,11 @@
-package ru.liga.currencyforecaster.service.validator;
+package ru.liga.currencyforecaster.validation;
 
 import org.junit.jupiter.api.Test;
+import ru.liga.currencyforecaster.validation.CommandValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static ru.liga.currencyforecaster.model.type.ConsoleMessage.*;
+import static ru.liga.currencyforecaster.enums.MessageEnum.*;
 
 public class CommandValidatorTest {
     CommandValidator validator;

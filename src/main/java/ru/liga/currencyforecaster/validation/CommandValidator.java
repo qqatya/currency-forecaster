@@ -1,6 +1,7 @@
-package ru.liga.currencyforecaster.service.validator;
+package ru.liga.currencyforecaster.validation;
 
-import ru.liga.currencyforecaster.model.type.*;
+import lombok.Getter;
+import ru.liga.currencyforecaster.enums.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -8,11 +9,12 @@ import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.liga.currencyforecaster.model.type.CommandIndex.COMMAND_TYPE_INDEX;
-import static ru.liga.currencyforecaster.model.type.CommandIndex.CURRENCY_TYPE_INDEX;
-import static ru.liga.currencyforecaster.model.type.ConsoleMessage.*;
+import static ru.liga.currencyforecaster.enums.CommandIndexEnum.COMMAND_TYPE_INDEX;
+import static ru.liga.currencyforecaster.enums.CommandIndexEnum.CURRENCY_TYPE_INDEX;
+import static ru.liga.currencyforecaster.enums.MessageEnum.*;
 
 public class CommandValidator {
+    @Getter
     private String errorMessage;
 
     public CommandValidator(String command) {
@@ -20,13 +22,9 @@ public class CommandValidator {
         validate(parsedCommand);
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
     private boolean validate(String[] command) {
         if (command.length != 0
-                && CommandType.findByCommand(command[COMMAND_TYPE_INDEX.getIndex()]) == CommandType.Q) {
+                && CommandEnum.findByCommand(command[COMMAND_TYPE_INDEX.getIndex()]) == CommandEnum.Q) {
             return true;
         }
         return validateCommandType(command[COMMAND_TYPE_INDEX.getIndex()])
@@ -44,9 +42,9 @@ public class CommandValidator {
     }
 
     private boolean validateCommandType(String value) {
-        CommandType commandType = CommandType.findByCommand(value);
+        CommandEnum commandType = CommandEnum.findByCommand(value);
 
-        if (commandType == CommandType.DEF) {
+        if (commandType == CommandEnum.DEF) {
             errorMessage = ILLEGAL_COMMAND.getMessage();
             return false;
         }
@@ -58,7 +56,7 @@ public class CommandValidator {
         boolean ifExists = false;
 
         for (String s : split) {
-            if (CurrencyType.findByCommand(s) != CurrencyType.DEF) {
+            if (CurrencyTypeEnum.findByCommand(s) != CurrencyTypeEnum.DEF) {
                 ifExists = true;
             } else {
                 errorMessage = UNAVAILABLE_CURRENCY.getMessage();
@@ -69,23 +67,24 @@ public class CommandValidator {
     }
 
     private boolean validateKeys(String[] command, String currency) {
-        Map<KeyType, String> keys = new HashMap<>();
+        Map<KeyEnum, String> keys = new HashMap<>();
+        int keyPlacement = 2;
 
-        for (int i = 2; i < command.length; i += 2) {
-            KeyType current = KeyType.findByCommand(command[i]);
+        for (int i = keyPlacement; i < command.length; i += keyPlacement) {
+            KeyEnum current = KeyEnum.findByCommand(command[i]);
 
-            if (current == KeyType.DEF) {
+            if (current == KeyEnum.DEF) {
                 errorMessage = KEY_DOESNT_EXIST.getMessage() + command[i];
                 return false;
             }
             keys.put(current, command[i + 1]);
         }
-        if (keys.containsKey(KeyType.DATE) && keys.containsKey(KeyType.PERIOD)) {
+        if (keys.containsKey(KeyEnum.DATE) && keys.containsKey(KeyEnum.PERIOD)) {
             errorMessage = DATE_PERIOD_CONFLICT.getMessage();
             return false;
         }
-        if ((keys.containsKey(KeyType.DATE) && keys.containsKey(KeyType.OUTPUT))
-                || (keys.containsKey(KeyType.PERIOD) && !keys.containsKey(KeyType.OUTPUT))) {
+        if ((keys.containsKey(KeyEnum.DATE) && keys.containsKey(KeyEnum.OUTPUT))
+                || (keys.containsKey(KeyEnum.PERIOD) && !keys.containsKey(KeyEnum.OUTPUT))) {
             errorMessage = OUTPUT_CONFLICT.getMessage();
             return false;
         }
@@ -93,10 +92,10 @@ public class CommandValidator {
         return validateValues(keys) && validateGraph(currency, keys);
     }
 
-    private boolean validateValues(Map<KeyType, String> values) {
+    private boolean validateValues(Map<KeyEnum, String> values) {
         boolean isValid = false;
 
-        for (Map.Entry<KeyType, String> entry : values.entrySet()) {
+        for (Map.Entry<KeyEnum, String> entry : values.entrySet()) {
             String current = entry.getValue();
 
             switch (entry.getKey()) {
@@ -110,7 +109,7 @@ public class CommandValidator {
     }
 
     private boolean validateDate(String value) {
-        if (ForecastRange.findByCommand(value) == ForecastRange.TOMORROW) {
+        if (ForecastRangeEnum.findByCommand(value) == ForecastRangeEnum.TOMORROW) {
             return true;
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -125,7 +124,7 @@ public class CommandValidator {
     }
 
     private boolean validateAlgorithm(String value) {
-        if (AlgorithmType.findByCommand(value) == AlgorithmType.DEF) {
+        if (AlgorithmTypeEnum.findByCommand(value) == AlgorithmTypeEnum.DEF) {
             errorMessage = INVALID_ALGORITHM.getMessage() + value;
             return false;
         }
@@ -133,9 +132,9 @@ public class CommandValidator {
     }
 
     private boolean validatePeriod(String value) {
-        ForecastRange period = ForecastRange.findByCommand(value);
+        ForecastRangeEnum period = ForecastRangeEnum.findByCommand(value);
 
-        if (period == ForecastRange.DEF || period == ForecastRange.TOMORROW) {
+        if (period == ForecastRangeEnum.DEF || period == ForecastRangeEnum.TOMORROW) {
             errorMessage = INVALID_PERIOD.getMessage() + value;
             return false;
         }
@@ -143,16 +142,16 @@ public class CommandValidator {
     }
 
     private boolean validateOutput(String value) {
-        if (OutputType.findByCommand(value) == OutputType.DEF) {
+        if (OutputTypeEnum.findByCommand(value) == OutputTypeEnum.DEF) {
             errorMessage = INVALID_OUTPUT.getMessage() + value;
             return false;
         }
         return true;
     }
 
-    private boolean validateGraph(String currency, Map<KeyType, String> keys) {
+    private boolean validateGraph(String currency, Map<KeyEnum, String> keys) {
         String[] split = currency.split(",");
-        String graph = OutputType.GRAPH.getCommandPart();
+        String graph = OutputTypeEnum.GRAPH.getCommandPart();
 
         if (split.length > 1 && !keys.containsValue(graph)) {
             errorMessage = MULTIPLE_CURRENCIES_GRAPH.getMessage();

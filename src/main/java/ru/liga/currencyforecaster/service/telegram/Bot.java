@@ -8,19 +8,20 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
+import ru.liga.currencyforecaster.handler.ForecastCommandExecutor;
 import ru.liga.currencyforecaster.model.Answer;
 
 @Slf4j
 public final class Bot extends TelegramLongPollingCommandBot {
     private final String BOT_NAME;
     private final String BOT_TOKEN;
-    private final StringCommand stringCommand;
+    private final ForecastCommandExecutor forecastCommandExecutor;
 
     public Bot(String botName, String botToken) {
         super();
         this.BOT_NAME = botName;
         this.BOT_TOKEN = botToken;
-        this.stringCommand = new StringCommand();
+        this.forecastCommandExecutor = new ForecastCommandExecutor();
     }
 
     public static void startBot() {
@@ -53,7 +54,7 @@ public final class Bot extends TelegramLongPollingCommandBot {
         Long chatId = msg.getChatId();
         String userName = getUserName(msg);
         log.info("Received an update for chatId: {}", chatId);
-        Answer answer = stringCommand.stringCommandExecute(chatId, userName, msg.getText());
+        Answer answer = forecastCommandExecutor.stringCommandExecute(chatId, userName, msg.getText());
         log.debug("Finished processing forecast: isGraph = {}", answer.getIsGraph());
         log.info("Sending answer for chatId: {}", chatId);
         setAnswer(answer);

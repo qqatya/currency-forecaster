@@ -1,8 +1,10 @@
-package ru.liga.currencyforecaster.service.parser;
+package ru.liga.currencyforecaster.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.liga.currencyforecaster.enums.CsvColumnsEnum;
+import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
+import ru.liga.currencyforecaster.exception.ValidationException;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.model.type.CurrencyType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,28 +13,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class CsvParser {
+public class CsvParsingController {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    private static final int CSV_COLUMNS_NAMES_INDEX = 0;
 
     /**
      * Индекс значения для поля nominal при парсинге строки в объект Currency
      */
-    private static final int NOMINAL_INDEX = 0;
+    private static int nominalIndex;
 
     /**
      * Индекс значения для поля date при парсинге строки в объект Currency
      */
-    private static final int DATE_INDEX = 1;
+    private static int dateIndex;
 
     /**
      * Индекс значения для поля rate при парсинге строки в объект Currency
      */
-    private static final int RATE_INDEX = 2;
+    private static int rateIndex;
 
     /**
      * Индекс значения для поля currencyType при парсинге строки в объект Currency
      */
-    private static final int CURRENCY_TYPE_INDEX = 3;
+    private static int currencyTypeIndex;
 
     /**
      * Парсинг строк, считанных из файла, для создания сущностей, по которым ведется прогноз
@@ -42,9 +46,19 @@ public class CsvParser {
      */
     public static List<Currency> parseFile(List<String> lines) {
         List<Currency> currencies = new ArrayList<>();
+        String[] columnNames = lines.get(CSV_COLUMNS_NAMES_INDEX).split(";");
 
-        for (String line : lines) {
-            currencies.add(convertStringToCurrency(line));
+        for (int i = 0; i < columnNames.length; i++) {
+            switch (CsvColumnsEnum.findByCommand(columnNames[i])) {
+                case NOMINAL -> nominalIndex = i;
+                case DATA -> dateIndex = i;
+                case CURS -> rateIndex = i;
+                case CDX -> currencyTypeIndex = i;
+                case DEF -> throw new ValidationException("File structure is not valid");
+            }
+        }
+        for (int i = 1; i < lines.size(); i++) {
+            currencies.add(convertStringToCurrency(lines.get(i)));
         }
         log.debug("Successfully converted lines to currencies");
         return currencies;
@@ -58,11 +72,11 @@ public class CsvParser {
      */
     private static Currency convertStringToCurrency(String value) {
         String[] split = value.split(";");
-        int nominal = Integer.parseInt(split[NOMINAL_INDEX].replaceAll("\\s", ""));
-        LocalDate date = LocalDate.parse(split[DATE_INDEX], FORMATTER);
-        BigDecimal rate = new BigDecimal(split[RATE_INDEX].replace(',', '.'));
-        CurrencyType currencyType = CurrencyType.findByCurrencyName(split[CURRENCY_TYPE_INDEX]);
+        int nominal = Integer.parseInt(split[nominalIndex].replaceAll("\\s", ""));
+        LocalDate date = LocalDate.parse(split[dateIndex], FORMATTER);
+        BigDecimal rate = new BigDecimal(split[rateIndex].replace(',', '.'));
+        CurrencyTypeEnum currencyTypeEnum = CurrencyTypeEnum.findByCurrencyName(split[currencyTypeIndex]);
 
-        return new Currency(nominal, date, rate, currencyType);
+        return new Currency(nominal, date, rate, currencyTypeEnum);
     }
 }

@@ -1,39 +1,46 @@
 package ru.liga.currencyforecaster.utils;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class CsvReaderTest {
-    String s = """
-            nominal;data;curs;cdx
-            100;29.03.2023;19,7260;Армянский драм
-            100;28.03.2023;19,7066;Армянский драм
-            100;25.03.2023;19,6995;Армянский драм
-            100;24.03.2023;19,6501;Армянский драм
-            100;23.03.2023;19,8254;Армянский драм
-            100;22.03.2023;19,7856;Армянский драм
-            100;21.03.2023;19,8832;Армянский драм
-            100;18.03.2023;19,7292;Армянский драм
-            100;17.03.2023;19,6612;Армянский драм""";
-    InputStream io = new ByteArrayInputStream(s.getBytes());
+    private static long lineCount;
+    private static Path path;
 
-    @Test
-    public void readsAllLinesFromFile() {
-        List<String> result = CsvReader.readAllFromFile(io);
-
-        assertEquals(9, result.size());
+    @BeforeAll
+    public static void setUp() throws URISyntaxException {
+        path = Path.of(ClassLoader.getSystemResource("csv/EURTest.csv").toURI());
+        try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
+            lineCount = stream.count();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
-    public void reads7LinesFromFile() {
-        List<String> result = CsvReader.readFromFile(io, 7);
+    public void getsPath() {
+        Path path = CsvReader.getFilePath("csv/EURTest.csv");
 
-        assertEquals(7, result.size());
+        assertNotNull(path.getFileName());
+        assertEquals("EURTest.csv", path.getFileName().toString());
+    }
+
+    @Test
+    public void readsAllLinesFromFile() {
+        List<String> result = CsvReader.readAllFromFile(path);
+
+        assertEquals(lineCount, result.size());
     }
 
 }

@@ -1,4 +1,4 @@
-package ru.liga.currencyforecaster.service.telegram;
+package ru.liga.currencyforecaster.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,7 +9,7 @@ import ru.liga.currencyforecaster.service.Forecaster;
  * Обработка команд в строчном формате
  */
 @Slf4j
-public class StringCommand {
+public class ForecastCommandExecutor {
 
     public Answer stringCommandExecute(Long chatId, String userName, String text) {
         log.debug("Executing command: {}", text);

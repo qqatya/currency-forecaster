@@ -1,19 +1,19 @@
 package ru.liga.currencyforecaster.utils;
 
+import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.model.type.CurrencyType;
 
 import java.util.List;
 
-import static ru.liga.currencyforecaster.model.type.ConsoleMessage.*;
+import static ru.liga.currencyforecaster.enums.MessageEnum.*;
 
 public class Printer {
     public static String printCurrencies() {
         StringBuilder values = new StringBuilder();
         values.append(NOTIFY_ABOUT_CURRENCIES.getMessage());
 
-        for (CurrencyType value : CurrencyType.values()) {
-            if (value != CurrencyType.DEF) {
+        for (CurrencyTypeEnum value : CurrencyTypeEnum.values()) {
+            if (value != CurrencyTypeEnum.DEF) {
                 values.append("- ")
                         .append(value)
                         .append("\n");
@@ -29,7 +29,7 @@ public class Printer {
     public static String printResult(List<Currency> resultRates) {
         StringBuilder values = new StringBuilder();
         for (Currency resultRate : resultRates) {
-            values.append(resultRate).append("\n");
+            values.append(resultRate.getDayAndRate()).append("\n");
         }
         return values.toString();
     }

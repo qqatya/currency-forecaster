@@ -1,8 +1,8 @@
 package ru.liga.currencyforecaster.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.model.type.CurrencyType;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 
 import java.time.LocalDate;
@@ -33,12 +33,14 @@ public class ForecastAlgorithmLastYear implements ForecastAlgorithm {
     }
 
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
-        Currency temp = new Currency(1, date.minusYears(1), null, CurrencyType.DEF);
+        int defaultValue = 1;
+        Currency temp = new Currency(defaultValue, date.minusYears(1), null, CurrencyTypeEnum.DEF);
         int daysIncrement = 1;
+        int yearsIncrement = 1;
 
         while (!currencies.contains(temp)) {
-            temp = new Currency(1, date.minusYears(1).minusDays(daysIncrement),
-                    null, CurrencyType.DEF);
+            temp = new Currency(defaultValue, date.minusYears(yearsIncrement).minusDays(daysIncrement),
+                    null, CurrencyTypeEnum.DEF);
             daysIncrement++;
         }
         return currencies.get(currencies.indexOf(temp));

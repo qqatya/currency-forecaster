@@ -1,9 +1,13 @@
-package ru.liga.currencyforecaster.model.type;
+package ru.liga.currencyforecaster.enums;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Перечисление констант для работы с командами
  */
-public enum CommandIndex {
+@AllArgsConstructor
+public enum CommandIndexEnum {
     /**
      * Индекс значения начала команды для расчета прогноза
      */
@@ -24,13 +28,7 @@ public enum CommandIndex {
      */
     RATE_COMMAND_LENGTH(3);
 
+    @Getter
     private final int index;
 
-    CommandIndex(int index) {
-        this.index = index;
-    }
-
-    public int getIndex() {
-        return index;
-    }
 }
