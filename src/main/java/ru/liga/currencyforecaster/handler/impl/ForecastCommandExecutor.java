@@ -12,7 +12,7 @@ import ru.liga.currencyforecaster.service.Forecaster;
 @Slf4j
 public class ForecastCommandExecutor implements CommandExecutor {
     @Override
-    public Answer executeCommand(Long chatId, String userName, String text) {
+    public Answer execute(Long chatId, String userName, String text) {
         log.debug("Executing command: {}", text);
         try {
             log.info("Start processing forecast");

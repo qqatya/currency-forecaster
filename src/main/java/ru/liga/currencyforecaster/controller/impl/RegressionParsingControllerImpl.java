@@ -57,11 +57,10 @@ public class RegressionParsingControllerImpl implements RegressionParsingControl
         for (Currency currency : currencies) {
             LocalDate currentDate = currency.getDate();
 
-            if (currentDate.isAfter(dateToCompare) || currentDate.equals(dateToCompare)) {
-                rates.add(currency.getRate().doubleValue());
-            } else {
+            if (currentDate.isBefore(dateToCompare)) {
                 break;
             }
+            rates.add(currency.getRate().doubleValue());
         }
         log.debug("Successfully parsed {} rates for linear regression", rates.size());
         return rates;

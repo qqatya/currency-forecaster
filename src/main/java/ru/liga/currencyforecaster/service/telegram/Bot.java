@@ -22,7 +22,7 @@ public final class Bot extends TelegramLongPollingCommandBot {
         super();
         this.BOT_NAME = botName;
         this.BOT_TOKEN = botToken;
-        this.commandExecutor = CommandExecutorFactory.getForecastCommandExecutor();
+        this.commandExecutor = CommandExecutorFactory.getCommandExecutor();
     }
 
     public static void startBot() {
@@ -57,7 +57,7 @@ public final class Bot extends TelegramLongPollingCommandBot {
         String userName = getUserName(msg);
 
         log.info("Received an update for chatId: {}", chatId);
-        Answer answer = commandExecutor.executeCommand(chatId, userName, msg.getText());
+        Answer answer = commandExecutor.execute(chatId, userName, msg.getText());
 
         log.debug("Finished processing forecast: isGraph = {}", answer.getIsGraph());
         log.info("Sending answer for chatId: {}", chatId);

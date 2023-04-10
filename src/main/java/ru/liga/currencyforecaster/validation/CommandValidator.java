@@ -16,6 +16,14 @@ import static ru.liga.currencyforecaster.enums.DelimiterEnum.WHITESPACES;
 import static ru.liga.currencyforecaster.enums.MessageEnum.*;
 
 public class CommandValidator {
+    /**
+     * Длина команды при наличии хотя бы одного ключа
+     */
+    private static final int LENGTH_WITH_KEY = 3;
+    /**
+     * Положение ключа в массиве command (четное значение)
+     */
+    private static final int KEY_PLACEMENT = 2;
     @Getter
     private String errorMessage;
 
@@ -36,9 +44,7 @@ public class CommandValidator {
     }
 
     private boolean validateCommandLength(String[] command) {
-        int firstKeyIndex = 3;
-
-        if (command.length < firstKeyIndex) {
+        if (command.length < LENGTH_WITH_KEY) {
             errorMessage = ILLEGAL_COMMAND.getMessage();
             return false;
         } else if (command.length % 2 != 0) {
@@ -60,24 +66,24 @@ public class CommandValidator {
 
     private boolean validateCurrencyType(String value) {
         String[] split = value.split(COMMA.getValue());
-        boolean ifExists = false;
+        boolean exists = false;
 
         for (String s : split) {
             if (CurrencyTypeEnum.findByCommand(s) != CurrencyTypeEnum.DEF) {
-                ifExists = true;
+                exists = true;
             } else {
                 errorMessage = UNAVAILABLE_CURRENCY.getMessage();
-                ifExists = false;
+                exists = false;
+                break;
             }
         }
-        return ifExists;
+        return exists;
     }
 
     private boolean validateKeys(String[] command, String currency) {
         Map<KeyEnum, String> keys = new HashMap<>();
-        int keyPlacement = 2;
 
-        for (int i = keyPlacement; i < command.length; i += keyPlacement) {
+        for (int i = KEY_PLACEMENT; i < command.length; i += KEY_PLACEMENT) {
             KeyEnum current = KeyEnum.findByCommand(command[i]);
 
             if (current == KeyEnum.DEF) {

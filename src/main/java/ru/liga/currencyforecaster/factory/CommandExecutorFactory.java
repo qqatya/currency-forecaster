@@ -4,7 +4,7 @@ import ru.liga.currencyforecaster.handler.CommandExecutor;
 import ru.liga.currencyforecaster.handler.impl.ForecastCommandExecutor;
 
 public class CommandExecutorFactory {
-    public static CommandExecutor getForecastCommandExecutor() {
+    public static CommandExecutor getCommandExecutor() {
         return new ForecastCommandExecutor();
     }
 }

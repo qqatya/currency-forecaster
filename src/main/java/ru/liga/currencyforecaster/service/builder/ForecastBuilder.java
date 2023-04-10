@@ -86,7 +86,7 @@ public class ForecastBuilder {
 
         for (int i = 0; i < tempCur.size(); i++) {
             List<Currency> temp = fileParsingController.parseFile(CsvReader.
-                    readAllFromFile(CsvReader.getFilePath(tempCur.get(i).getPath())));
+                    readAllFromFile(tempCur.get(i).getPath()));
 
             forecastPattern[i] = forecastAlgorithm.predictRate(temp, startDate,
                     targetDaysAmount);
@@ -113,7 +113,7 @@ public class ForecastBuilder {
         for (CurrencyTypeEnum currency : currencyTypeEnums) {
             fileName = currency.getPath();
         }
-        return fileParsingController.parseFile(CsvReader.readAllFromFile(CsvReader.getFilePath(fileName)));
+        return fileParsingController.parseFile(CsvReader.readAllFromFile(fileName));
     }
 
     private SendPhoto getGraphPicture(Long chatId, GraphBuilder graphBuilder) {
