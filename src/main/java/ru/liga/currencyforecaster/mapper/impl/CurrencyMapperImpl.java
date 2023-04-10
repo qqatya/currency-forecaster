@@ -1,10 +1,10 @@
-package ru.liga.currencyforecaster.controller.impl;
+package ru.liga.currencyforecaster.mapper.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.liga.currencyforecaster.controller.FileParsingController;
 import ru.liga.currencyforecaster.enums.CsvColumnsEnum;
 import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.exception.ValidationException;
+import ru.liga.currencyforecaster.mapper.CurrencyMapper;
 import ru.liga.currencyforecaster.model.Currency;
 
 import java.math.BigDecimal;
@@ -16,7 +16,7 @@ import java.util.List;
 import static ru.liga.currencyforecaster.enums.DelimiterEnum.*;
 
 @Slf4j
-public class CsvFileParsingControllerImpl implements FileParsingController {
+public class CurrencyMapperImpl implements CurrencyMapper {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private static final int CSV_COLUMNS_NAMES_INDEX = 0;

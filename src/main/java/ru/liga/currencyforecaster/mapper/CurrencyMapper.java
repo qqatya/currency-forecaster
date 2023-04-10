@@ -1,10 +1,10 @@
-package ru.liga.currencyforecaster.controller;
+package ru.liga.currencyforecaster.mapper;
 
 import ru.liga.currencyforecaster.model.Currency;
 
 import java.util.List;
 
-public interface FileParsingController {
+public interface CurrencyMapper {
     /**
      * Парсинг строк, считанных из файла, для создания сущностей, по которым ведется прогноз
      *

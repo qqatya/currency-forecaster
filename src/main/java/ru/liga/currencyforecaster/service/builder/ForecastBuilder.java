@@ -4,15 +4,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.jfree.chart.ChartUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import ru.liga.currencyforecaster.controller.FileParsingController;
 import ru.liga.currencyforecaster.enums.AlgorithmTypeEnum;
 import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.enums.ForecastRangeEnum;
 import ru.liga.currencyforecaster.enums.KeyEnum;
+import ru.liga.currencyforecaster.factory.AlgorithmFactory;
+import ru.liga.currencyforecaster.factory.CurrencyMapperFactory;
+import ru.liga.currencyforecaster.mapper.CurrencyMapper;
 import ru.liga.currencyforecaster.model.Command;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.factory.AlgorithmFactory;
-import ru.liga.currencyforecaster.factory.ControllerFactory;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 import ru.liga.currencyforecaster.utils.CsvReader;
 
@@ -82,10 +82,10 @@ public class ForecastBuilder {
         List<Currency>[] forecastPattern = new List[currencies.size()];
 
         ForecastAlgorithm forecastAlgorithm = AlgorithmFactory.getForecastAlgorithm(algorithmType);
-        FileParsingController fileParsingController = ControllerFactory.getFileParsingController();
+        CurrencyMapper currencyMapper = CurrencyMapperFactory.getCurrencyMapper();
 
         for (int i = 0; i < tempCur.size(); i++) {
-            List<Currency> temp = fileParsingController.parseFile(CsvReader.
+            List<Currency> temp = currencyMapper.parseFile(CsvReader.
                     readAllFromFile(tempCur.get(i).getPath()));
 
             forecastPattern[i] = forecastAlgorithm.predictRate(temp, startDate,
@@ -108,12 +108,12 @@ public class ForecastBuilder {
 
     private List<Currency> getCurrenciesByType(Set<CurrencyTypeEnum> currencyTypeEnums) {
         String fileName = "";
-        FileParsingController fileParsingController = ControllerFactory.getFileParsingController();
+        CurrencyMapper currencyMapper = CurrencyMapperFactory.getCurrencyMapper();
 
         for (CurrencyTypeEnum currency : currencyTypeEnums) {
             fileName = currency.getPath();
         }
-        return fileParsingController.parseFile(CsvReader.readAllFromFile(fileName));
+        return currencyMapper.parseFile(CsvReader.readAllFromFile(fileName));
     }
 
     private SendPhoto getGraphPicture(Long chatId, GraphBuilder graphBuilder) {

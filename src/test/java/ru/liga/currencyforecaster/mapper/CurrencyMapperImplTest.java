@@ -1,10 +1,10 @@
-package ru.liga.currencyforecaster.controller;
+package ru.liga.currencyforecaster.mapper;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.liga.currencyforecaster.exception.ValidationException;
+import ru.liga.currencyforecaster.factory.CurrencyMapperFactory;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.factory.ControllerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,14 +14,14 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.liga.currencyforecaster.enums.CurrencyTypeEnum.EUR;
 
-class CsvFileParsingControllerImplTest {
+class CurrencyMapperImplTest {
 
     private static List<String> values;
-    private static FileParsingController controller;
+    private static CurrencyMapper controller;
 
     @BeforeAll
     static void setUp() {
-        controller = ControllerFactory.getFileParsingController();
+        controller = CurrencyMapperFactory.getCurrencyMapper();
         values = new ArrayList<>();
         values.add("curs;cdx;nominal;data");
         values.add("82,7750;Евро;1;29.03.2023");
