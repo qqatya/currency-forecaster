@@ -41,17 +41,17 @@ public class ForecastAlgorithmLastYear implements ForecastAlgorithm {
 
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
         Map<LocalDate, Currency> tempCur = new HashMap<>();
-        LocalDate tempDate = date.minusYears(1);
+        LocalDate lastYearDate = date.minusYears(1);
         int daysIncrement = 1;
         int yearsIncrement = 1;
 
         for (Currency currency : currencies) {
             tempCur.put(currency.getDate(), currency);
         }
-        while (!tempCur.containsKey(tempDate)) {
-            tempDate = date.minusYears(yearsIncrement).minusDays(daysIncrement);
+        while (!tempCur.containsKey(lastYearDate)) {
+            lastYearDate = date.minusYears(yearsIncrement).minusDays(daysIncrement);
             daysIncrement++;
         }
-        return tempCur.get(tempDate);
+        return tempCur.get(lastYearDate);
     }
 }
