@@ -2,7 +2,6 @@ package ru.liga.currencyforecaster.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.controller.RegressionParsingController;
-import ru.liga.currencyforecaster.controller.impl.RegressionParsingControllerImpl;
 import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;

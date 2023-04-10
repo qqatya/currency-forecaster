@@ -32,7 +32,7 @@ class CsvFileParsingControllerImplTest {
     void parsesCurrenciesBasedOnColumns() {
         List<Currency> currencies = controller.parseFile(values);
         Currency currency = new Currency(1,
-                LocalDate.of(2023, 03, 29),
+                LocalDate.of(2023, 3, 29),
                 new BigDecimal("82.7750"),
                 EUR);
 
