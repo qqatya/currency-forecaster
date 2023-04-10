@@ -78,18 +78,15 @@ public class ForecastBuilder {
      * @return Изображение графа
      */
     public SendPhoto getGraph(Long chatId, Set<CurrencyTypeEnum> currencies) {
-        List<String> fileNames = new ArrayList<>();
+        List<CurrencyTypeEnum> tempCur = new ArrayList<>(currencies);
         List<Currency>[] forecastPattern = new List[currencies.size()];
 
-        for (CurrencyTypeEnum currency : currencies) {
-            fileNames.add(currency.getPath());
-        }
         ForecastAlgorithm forecastAlgorithm = AlgorithmFactory.getForecastAlgorithm(algorithmType);
         FileParsingController fileParsingController = ControllerFactory.getFileParsingController();
 
-        for (int i = 0; i < fileNames.size(); i++) {
+        for (int i = 0; i < tempCur.size(); i++) {
             List<Currency> temp = fileParsingController.parseFile(CsvReader.
-                    readAllFromFile(CsvReader.getFilePath(fileNames.get(i))));
+                    readAllFromFile(CsvReader.getFilePath(tempCur.get(i).getPath())));
 
             forecastPattern[i] = forecastAlgorithm.predictRate(temp, startDate,
                     targetDaysAmount);
@@ -128,11 +125,11 @@ public class ForecastBuilder {
                     graphBuilder.getWidth(),
                     graphBuilder.getHeight());
             byte[] bytes = out.toByteArray();
-            InputStream in = new ByteArrayInputStream(bytes);
-            message.setPhoto(new InputFile(in, "forecast.png"));
-            in.close();
+            try (InputStream in = new ByteArrayInputStream(bytes)) {
+                message.setPhoto(new InputFile(in, "forecast.png"));
+            }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            log.error("An error occurred while creating a picture for chatId: {}", chatId);
         }
         message.setChatId(chatId);
         return message;
