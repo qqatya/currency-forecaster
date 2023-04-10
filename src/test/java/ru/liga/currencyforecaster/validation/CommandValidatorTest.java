@@ -1,7 +1,6 @@
 package ru.liga.currencyforecaster.validation;
 
 import org.junit.jupiter.api.Test;
-import ru.liga.currencyforecaster.validation.CommandValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -120,5 +119,13 @@ public class CommandValidatorTest {
 
         validator = new CommandValidator(command);
         assertEquals(MULTIPLE_CURRENCIES_GRAPH.getMessage(), validator.getErrorMessage());
+    }
+
+    @Test
+    public void returnsIllegalCommandIfLengthIsEvenButNotAllKeysArePresent() {
+        String command = "rate EUR -period week";
+
+        validator = new CommandValidator(command);
+        assertEquals(ILLEGAL_COMMAND.getMessage(), validator.getErrorMessage());
     }
 }

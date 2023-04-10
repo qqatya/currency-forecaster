@@ -36,7 +36,12 @@ public class CommandValidator {
     }
 
     private boolean validateCommandLength(String[] command) {
-        if (command.length % 2 != 0) {
+        int firstKeyIndex = 3;
+
+        if (command.length < firstKeyIndex) {
+            errorMessage = ILLEGAL_COMMAND.getMessage();
+            return false;
+        } else if (command.length % 2 != 0) {
             errorMessage = KEY_VALUE_MISMATCH.getMessage();
             return false;
         }
@@ -81,6 +86,10 @@ public class CommandValidator {
             }
             keys.put(current, command[i + 1]);
         }
+        if (!((keys.containsKey(KeyEnum.DATE) || keys.containsKey(KeyEnum.PERIOD)) && keys.containsKey(KeyEnum.ALG))) {
+            errorMessage = ILLEGAL_COMMAND.getMessage();
+            return false;
+        }
         if (keys.containsKey(KeyEnum.DATE) && keys.containsKey(KeyEnum.PERIOD)) {
             errorMessage = DATE_PERIOD_CONFLICT.getMessage();
             return false;
@@ -90,7 +99,6 @@ public class CommandValidator {
             errorMessage = OUTPUT_CONFLICT.getMessage();
             return false;
         }
-
         return validateValues(keys) && validateGraph(currency, keys);
     }
 
