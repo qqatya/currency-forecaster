@@ -1,8 +1,9 @@
-package ru.liga.currencyforecaster.service;
+package ru.liga.currencyforecaster.service.factory;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.enums.AlgorithmTypeEnum;
 import ru.liga.currencyforecaster.exception.AlgorithmTypeNotFoundException;
+import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 import ru.liga.currencyforecaster.service.impl.ForecastAlgorithmAvg;
 import ru.liga.currencyforecaster.service.impl.ForecastAlgorithmFromInternet;
 import ru.liga.currencyforecaster.service.impl.ForecastAlgorithmLastYear;

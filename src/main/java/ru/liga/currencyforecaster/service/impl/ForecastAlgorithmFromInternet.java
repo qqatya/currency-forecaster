@@ -2,9 +2,11 @@ package ru.liga.currencyforecaster.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.controller.RegressionParsingController;
+import ru.liga.currencyforecaster.controller.impl.RegressionParsingControllerImpl;
 import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
+import ru.liga.currencyforecaster.service.factory.ControllerFactory;
 import ru.liga.currencyforecaster.utils.LinearRegression;
 
 import java.math.BigDecimal;
@@ -39,8 +41,9 @@ public class ForecastAlgorithmFromInternet implements ForecastAlgorithm {
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
         int nominal = currencies.get(NEWEST_CURRENCY_INDEX).getNominal();
         CurrencyTypeEnum currencyTypeEnum = currencies.get(NEWEST_CURRENCY_INDEX).getCurrencyType();
-        LinearRegression regression = new LinearRegression(RegressionParsingController.parseDays(currencies),
-                RegressionParsingController.parseRates(currencies));
+        RegressionParsingController regressionParsingController = ControllerFactory.getRegressionParsingController();
+        LinearRegression regression = new LinearRegression(regressionParsingController.parseDays(currencies),
+                regressionParsingController.parseRates(currencies));
         BigDecimal nextDayRate = BigDecimal.valueOf(regression.predict(date.getDayOfYear()));
 
         return new Currency(nominal, date, nextDayRate, currencyTypeEnum);

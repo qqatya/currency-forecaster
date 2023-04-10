@@ -1,6 +1,7 @@
-package ru.liga.currencyforecaster.controller;
+package ru.liga.currencyforecaster.controller.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.liga.currencyforecaster.controller.FileParsingController;
 import ru.liga.currencyforecaster.enums.CsvColumnsEnum;
 import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.exception.ValidationException;
@@ -15,7 +16,7 @@ import java.util.List;
 import static ru.liga.currencyforecaster.enums.DelimiterEnum.*;
 
 @Slf4j
-public class CsvParsingController {
+public class CsvFileParsingControllerImpl implements FileParsingController {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     private static final int CSV_COLUMNS_NAMES_INDEX = 0;
@@ -40,13 +41,8 @@ public class CsvParsingController {
      */
     private static int currencyTypeIndex;
 
-    /**
-     * Парсинг строк, считанных из файла, для создания сущностей, по которым ведется прогноз
-     *
-     * @param lines Список строк, полученных при чтении файла
-     * @return Результат парсинга
-     */
-    public static List<Currency> parseFile(List<String> lines) {
+    @Override
+    public List<Currency> parseFile(List<String> lines) {
         List<Currency> currencies = new ArrayList<>();
         String[] columnNames = lines.get(CSV_COLUMNS_NAMES_INDEX).split(SEMICOLON.getValue());
 
@@ -72,7 +68,7 @@ public class CsvParsingController {
      * @param value Строка, содержащая значения аргументов конструктора Currency
      * @return Объект Currency
      */
-    private static Currency convertStringToCurrency(String value) {
+    private Currency convertStringToCurrency(String value) {
         String[] split = value.split(SEMICOLON.getValue());
         int nominal = Integer.parseInt(split[nominalIndex].replaceAll(WHITESPACES.getValue(), EMPTY_STR.getValue()));
         LocalDate date = LocalDate.parse(split[dateIndex], FORMATTER);

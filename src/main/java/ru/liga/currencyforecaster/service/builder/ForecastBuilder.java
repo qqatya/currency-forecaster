@@ -4,18 +4,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.jfree.chart.ChartUtils;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
-import ru.liga.currencyforecaster.controller.CsvParsingController;
+import ru.liga.currencyforecaster.controller.FileParsingController;
 import ru.liga.currencyforecaster.enums.AlgorithmTypeEnum;
 import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.enums.ForecastRangeEnum;
 import ru.liga.currencyforecaster.enums.KeyEnum;
 import ru.liga.currencyforecaster.model.Command;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.service.AlgorithmFactory;
+import ru.liga.currencyforecaster.service.factory.AlgorithmFactory;
+import ru.liga.currencyforecaster.service.factory.ControllerFactory;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 import ru.liga.currencyforecaster.utils.CsvReader;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -81,9 +85,10 @@ public class ForecastBuilder {
             fileNames.add(currency.getPath());
         }
         ForecastAlgorithm forecastAlgorithm = AlgorithmFactory.getForecastAlgorithm(algorithmType);
+        FileParsingController fileParsingController = ControllerFactory.getFileParsingController();
 
         for (int i = 0; i < fileNames.size(); i++) {
-            List<Currency> temp = CsvParsingController.parseFile(CsvReader.
+            List<Currency> temp = fileParsingController.parseFile(CsvReader.
                     readAllFromFile(CsvReader.getFilePath(fileNames.get(i))));
 
             forecastPattern[i] = forecastAlgorithm.predictRate(temp, startDate,
@@ -106,14 +111,17 @@ public class ForecastBuilder {
 
     private List<Currency> getCurrenciesByType(Set<CurrencyTypeEnum> currencyTypeEnums) {
         String fileName = "";
+        FileParsingController fileParsingController = ControllerFactory.getFileParsingController();
+
         for (CurrencyTypeEnum currency : currencyTypeEnums) {
             fileName = currency.getPath();
         }
-        return CsvParsingController.parseFile(CsvReader.readAllFromFile(CsvReader.getFilePath(fileName)));
+        return fileParsingController.parseFile(CsvReader.readAllFromFile(CsvReader.getFilePath(fileName)));
     }
 
     private SendPhoto getGraphPicture(Long chatId, GraphBuilder graphBuilder) {
         SendPhoto message = new SendPhoto();
+
         try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             ChartUtils.writeChartAsPNG(out,
                     graphBuilder.getXYLineChart(),
