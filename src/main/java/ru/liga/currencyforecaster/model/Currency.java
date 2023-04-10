@@ -6,10 +6,7 @@ import lombok.ToString;
 import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -19,21 +16,10 @@ import java.util.Objects;
 @Getter
 @ToString
 public class Currency {
-    private static final SimpleDateFormat SIMPLE_DATE_FORMATTER = new SimpleDateFormat("E dd.MM.yyyy");
     private final int nominal;
     private final LocalDate date;
     private final BigDecimal rate;
     private final CurrencyTypeEnum currencyType;
-
-    /**
-     * Получение даты и курса
-     *
-     * @return Строка с отформатированными данными
-     */
-    public String getDayAndRate() {
-        return SIMPLE_DATE_FORMATTER.format(Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()))
-                + " - " + String.format("%.2f", rate);
-    }
 
     @Override
     public boolean equals(Object obj) {
