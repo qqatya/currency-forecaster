@@ -11,6 +11,8 @@ import java.util.Map;
 
 import static ru.liga.currencyforecaster.enums.CommandIndexEnum.COMMAND_TYPE_INDEX;
 import static ru.liga.currencyforecaster.enums.CommandIndexEnum.CURRENCY_TYPE_INDEX;
+import static ru.liga.currencyforecaster.enums.DelimiterEnum.COMMA;
+import static ru.liga.currencyforecaster.enums.DelimiterEnum.WHITESPACES;
 import static ru.liga.currencyforecaster.enums.MessageEnum.*;
 
 public class CommandValidator {
@@ -18,7 +20,7 @@ public class CommandValidator {
     private String errorMessage;
 
     public CommandValidator(String command) {
-        String[] parsedCommand = command.split(" ");
+        String[] parsedCommand = command.split(WHITESPACES.getValue());
         validate(parsedCommand);
     }
 
@@ -52,7 +54,7 @@ public class CommandValidator {
     }
 
     private boolean validateCurrencyType(String value) {
-        String[] split = value.split(",");
+        String[] split = value.split(COMMA.getValue());
         boolean ifExists = false;
 
         for (String s : split) {
@@ -150,7 +152,7 @@ public class CommandValidator {
     }
 
     private boolean validateGraph(String currency, Map<KeyEnum, String> keys) {
-        String[] split = currency.split(",");
+        String[] split = currency.split(COMMA.getValue());
         String graph = OutputTypeEnum.GRAPH.getCommandPart();
 
         if (split.length > 1 && !keys.containsValue(graph)) {

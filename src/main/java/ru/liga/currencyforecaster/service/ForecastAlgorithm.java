@@ -14,5 +14,5 @@ public interface ForecastAlgorithm {
      * @param daysAmount Количество дней, на которые нужно рассчитать курс
      * @return Результат прогноза
      */
-    List<Currency> predictRateForSomeDays(List<Currency> currencies, LocalDate startDate, int daysAmount);
+    List<Currency> predictRate(List<Currency> currencies, LocalDate startDate, int daysAmount);
 }

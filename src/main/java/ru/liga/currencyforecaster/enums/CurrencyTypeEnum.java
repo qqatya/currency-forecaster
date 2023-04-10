@@ -1,7 +1,7 @@
 package ru.liga.currencyforecaster.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Перечисление типов валют
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum CurrencyTypeEnum {
     EUR("EUR", "Евро", "csv/EUR.csv"),
     USD("USD", "Доллар США", "csv/USD.csv"),

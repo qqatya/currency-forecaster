@@ -13,6 +13,8 @@ import java.util.Set;
 
 import static ru.liga.currencyforecaster.enums.CommandIndexEnum.COMMAND_TYPE_INDEX;
 import static ru.liga.currencyforecaster.enums.CommandIndexEnum.CURRENCY_TYPE_INDEX;
+import static ru.liga.currencyforecaster.enums.DelimiterEnum.COMMA;
+import static ru.liga.currencyforecaster.enums.DelimiterEnum.WHITESPACES;
 
 @Slf4j
 public class CommandParsingController {
@@ -24,7 +26,7 @@ public class CommandParsingController {
      */
     public static Command parseCommand(String command) {
         log.debug("Start parsing command");
-        String[] parsedCommand = command.split(" ");
+        String[] parsedCommand = command.split(WHITESPACES.getValue());
         CommandEnum type = CommandEnum.findByCommand(parsedCommand[COMMAND_TYPE_INDEX.getIndex()]);
         Map<KeyEnum, String> tempKeys = parseKeys(parsedCommand);
         Set<CurrencyTypeEnum> tempCur = parseCurrencies(parsedCommand[CURRENCY_TYPE_INDEX.getIndex()]);
@@ -52,7 +54,7 @@ public class CommandParsingController {
     }
 
     private static Set<CurrencyTypeEnum> parseCurrencies(String currencies) {
-        String[] split = currencies.split(",");
+        String[] split = currencies.split(COMMA.getValue());
         Set<CurrencyTypeEnum> parsedCurrencies = new HashSet<>();
 
         for (String s : split) {

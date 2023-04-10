@@ -1,7 +1,7 @@
 package ru.liga.currencyforecaster.exception;
 
-import lombok.experimental.StandardException;
+import lombok.NoArgsConstructor;
 
-@StandardException
+@NoArgsConstructor
 public class AlgorithmTypeNotFoundException extends RuntimeException {
 }

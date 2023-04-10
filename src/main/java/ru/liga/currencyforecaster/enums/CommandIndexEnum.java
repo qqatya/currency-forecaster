@@ -1,12 +1,12 @@
 package ru.liga.currencyforecaster.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Перечисление констант для работы с командами
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum CommandIndexEnum {
     /**
      * Индекс значения начала команды для расчета прогноза

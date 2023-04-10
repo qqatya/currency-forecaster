@@ -12,6 +12,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.liga.currencyforecaster.enums.DelimiterEnum.*;
+
 @Slf4j
 public class CsvParsingController {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
@@ -46,7 +48,7 @@ public class CsvParsingController {
      */
     public static List<Currency> parseFile(List<String> lines) {
         List<Currency> currencies = new ArrayList<>();
-        String[] columnNames = lines.get(CSV_COLUMNS_NAMES_INDEX).split(";");
+        String[] columnNames = lines.get(CSV_COLUMNS_NAMES_INDEX).split(SEMICOLON.getValue());
 
         for (int i = 0; i < columnNames.length; i++) {
             switch (CsvColumnsEnum.findByCommand(columnNames[i])) {
@@ -71,10 +73,10 @@ public class CsvParsingController {
      * @return Объект Currency
      */
     private static Currency convertStringToCurrency(String value) {
-        String[] split = value.split(";");
-        int nominal = Integer.parseInt(split[nominalIndex].replaceAll("\\s", ""));
+        String[] split = value.split(SEMICOLON.getValue());
+        int nominal = Integer.parseInt(split[nominalIndex].replaceAll(WHITESPACES.getValue(), EMPTY_STR.getValue()));
         LocalDate date = LocalDate.parse(split[dateIndex], FORMATTER);
-        BigDecimal rate = new BigDecimal(split[rateIndex].replace(',', '.'));
+        BigDecimal rate = new BigDecimal(split[rateIndex].replace(COMMA.getValue(), DOT.getValue()));
         CurrencyTypeEnum currencyTypeEnum = CurrencyTypeEnum.findByCurrencyName(split[currencyTypeIndex]);
 
         return new Currency(nominal, date, rate, currencyTypeEnum);

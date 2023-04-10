@@ -1,7 +1,7 @@
 package ru.liga.currencyforecaster.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Перечисление вариантов вывода результатов расчета
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum OutputTypeEnum {
     LIST("list"),
     GRAPH("graph"),

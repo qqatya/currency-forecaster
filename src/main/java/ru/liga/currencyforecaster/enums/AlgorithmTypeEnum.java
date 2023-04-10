@@ -1,6 +1,6 @@
 package ru.liga.currencyforecaster.enums;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Перечисление типов алгоритмов
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum AlgorithmTypeEnum {
     AVG("avg"),
     LYEAR("lyear"),

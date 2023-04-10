@@ -62,7 +62,7 @@ public class ForecastBuilder {
         log.debug("target days = {}", targetDaysAmount);
         ForecastAlgorithm forecastAlgorithm = AlgorithmFactory.getForecastAlgorithm(algorithmType);
 
-        return forecastAlgorithm.predictRateForSomeDays(forecastPattern, startDate,
+        return forecastAlgorithm.predictRate(forecastPattern, startDate,
                 targetDaysAmount);
     }
 
@@ -86,7 +86,7 @@ public class ForecastBuilder {
             List<Currency> temp = CsvParsingController.parseFile(CsvReader.
                     readAllFromFile(CsvReader.getFilePath(fileNames.get(i))));
 
-            forecastPattern[i] = forecastAlgorithm.predictRateForSomeDays(temp, startDate,
+            forecastPattern[i] = forecastAlgorithm.predictRate(temp, startDate,
                     targetDaysAmount);
         }
         int pngWidth = 560;

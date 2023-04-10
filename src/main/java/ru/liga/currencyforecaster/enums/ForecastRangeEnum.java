@@ -1,7 +1,7 @@
 package ru.liga.currencyforecaster.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Перечисление промежутков для расчетов
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum ForecastRangeEnum {
     TOMORROW("tomorrow", 1),
     WEEK("week", 7),

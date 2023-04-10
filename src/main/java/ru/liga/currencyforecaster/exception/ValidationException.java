@@ -1,8 +1,10 @@
 package ru.liga.currencyforecaster.exception;
 
-import lombok.experimental.StandardException;
+import lombok.NoArgsConstructor;
 
-@StandardException
+@NoArgsConstructor
 public class ValidationException extends RuntimeException {
-
+    public ValidationException(String message) {
+        super(message);
+    }
 }

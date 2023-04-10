@@ -1,11 +1,11 @@
 package ru.liga.currencyforecaster.enums;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum CsvColumnsEnum {
     NOMINAL("nominal"),
     DATA("data"),

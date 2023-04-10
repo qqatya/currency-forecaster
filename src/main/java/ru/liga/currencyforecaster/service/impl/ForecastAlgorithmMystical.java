@@ -18,9 +18,9 @@ public class ForecastAlgorithmMystical implements ForecastAlgorithm {
     private static final int NEWEST_CURRENCY_INDEX = 0;
 
     @Override
-    public List<Currency> predictRateForSomeDays(List<Currency> currencies,
-                                                 LocalDate startDate,
-                                                 int daysAmount) {
+    public List<Currency> predictRate(List<Currency> currencies,
+                                      LocalDate startDate,
+                                      int daysAmount) {
         List<Currency> tmpCurrencies = new ArrayList<>(currencies);
         List<Currency> ratesResult = new ArrayList<>();
 

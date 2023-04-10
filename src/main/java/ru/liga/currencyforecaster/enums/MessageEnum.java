@@ -1,12 +1,12 @@
 package ru.liga.currencyforecaster.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Строковые константы
  */
-@AllArgsConstructor
+@RequiredArgsConstructor
 public enum MessageEnum {
     NOTIFY_ABOUT_CURRENCIES("Перечень доступных валют:\n"),
     NOTIFY_ABOUT_COMMANDS("Примеры доступных команд:\n"),
