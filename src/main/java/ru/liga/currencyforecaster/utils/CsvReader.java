@@ -1,7 +1,7 @@
 package ru.liga.currencyforecaster.utils;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.liga.currencyforecaster.exception.FileNotFoundException;
+import ru.liga.currencyforecaster.exception.CurrencyFileNotFoundException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -38,6 +38,6 @@ public class CsvReader {
         } catch (URISyntaxException e) {
             log.error("File not found: {}", fileName);
         }
-        throw new FileNotFoundException();
+        throw new CurrencyFileNotFoundException();
     }
 }

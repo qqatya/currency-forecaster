@@ -3,5 +3,5 @@ package ru.liga.currencyforecaster.exception;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class FileNotFoundException extends RuntimeException {
+public class CurrencyFileNotFoundException extends RuntimeException {
 }
