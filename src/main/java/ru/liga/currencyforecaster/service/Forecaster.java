@@ -7,7 +7,7 @@ import ru.liga.currencyforecaster.enums.OutputTypeEnum;
 import ru.liga.currencyforecaster.model.Answer;
 import ru.liga.currencyforecaster.model.Command;
 import ru.liga.currencyforecaster.service.builder.ForecastBuilder;
-import ru.liga.currencyforecaster.service.factory.ControllerFactory;
+import ru.liga.currencyforecaster.factory.ControllerFactory;
 import ru.liga.currencyforecaster.utils.Printer;
 import ru.liga.currencyforecaster.validation.CommandValidator;
 

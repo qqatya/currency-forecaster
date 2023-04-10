@@ -11,8 +11,8 @@ import ru.liga.currencyforecaster.enums.ForecastRangeEnum;
 import ru.liga.currencyforecaster.enums.KeyEnum;
 import ru.liga.currencyforecaster.model.Command;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.service.factory.AlgorithmFactory;
-import ru.liga.currencyforecaster.service.factory.ControllerFactory;
+import ru.liga.currencyforecaster.factory.AlgorithmFactory;
+import ru.liga.currencyforecaster.factory.ControllerFactory;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 import ru.liga.currencyforecaster.utils.CsvReader;
 

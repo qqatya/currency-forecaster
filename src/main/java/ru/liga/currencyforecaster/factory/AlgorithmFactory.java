@@ -1,4 +1,4 @@
-package ru.liga.currencyforecaster.service.factory;
+package ru.liga.currencyforecaster.factory;
 
 import lombok.extern.slf4j.Slf4j;
 import ru.liga.currencyforecaster.enums.AlgorithmTypeEnum;

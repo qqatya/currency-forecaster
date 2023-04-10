@@ -5,7 +5,7 @@ import ru.liga.currencyforecaster.controller.RegressionParsingController;
 import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
-import ru.liga.currencyforecaster.service.factory.ControllerFactory;
+import ru.liga.currencyforecaster.factory.ControllerFactory;
 import ru.liga.currencyforecaster.utils.LinearRegression;
 
 import java.math.BigDecimal;

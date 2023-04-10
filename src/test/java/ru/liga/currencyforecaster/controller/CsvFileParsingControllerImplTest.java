@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.liga.currencyforecaster.exception.ValidationException;
 import ru.liga.currencyforecaster.model.Currency;
-import ru.liga.currencyforecaster.service.factory.ControllerFactory;
+import ru.liga.currencyforecaster.factory.ControllerFactory;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
