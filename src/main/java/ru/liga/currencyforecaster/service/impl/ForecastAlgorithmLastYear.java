@@ -1,14 +1,15 @@
 package ru.liga.currencyforecaster.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.exception.EmptyObjectException;
 import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static ru.liga.currencyforecaster.enums.MessageEnum.EMPTY_LIST;
 
@@ -39,16 +40,18 @@ public class ForecastAlgorithmLastYear implements ForecastAlgorithm {
     }
 
     private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
-        int defaultValue = 1;
-        Currency temp = new Currency(defaultValue, date.minusYears(1), null, CurrencyTypeEnum.DEF);
+        Map<LocalDate, Currency> tempCur = new HashMap<>();
+        LocalDate tempDate = date.minusYears(1);
         int daysIncrement = 1;
         int yearsIncrement = 1;
 
-        while (!currencies.contains(temp)) {
-            temp = new Currency(defaultValue, date.minusYears(yearsIncrement).minusDays(daysIncrement),
-                    null, CurrencyTypeEnum.DEF);
+        for (Currency currency : currencies) {
+            tempCur.put(currency.getDate(), currency);
+        }
+        while (!tempCur.containsKey(tempDate)) {
+            tempDate = date.minusYears(yearsIncrement).minusDays(daysIncrement);
             daysIncrement++;
         }
-        return currencies.get(currencies.indexOf(temp));
+        return tempCur.get(tempDate);
     }
 }

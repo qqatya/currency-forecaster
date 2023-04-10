@@ -29,7 +29,8 @@ public enum MessageEnum {
     MULTIPLE_CURRENCIES_GRAPH("Для расчета курса по нескольким валютам используйте ключ -output graph"),
     EMPTY_LIST("Список сущностей, по которым ведется расчет, пустой"),
     ILLEGAL_FILE_STRUCTURE("Некорректная структура файла"),
-    EMPTY_SET("Значения валют отсутствуют");
+    EMPTY_SET("Значения валют отсутствуют"),
+    NO_FORECAST_DATA("Данные для расчета отсутствуют");
 
     @Getter
     private final String message;
