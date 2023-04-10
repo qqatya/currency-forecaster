@@ -26,7 +26,10 @@ public enum MessageEnum {
     INVALID_PERIOD("Введен некорректный период для расчета: "),
     INVALID_OUTPUT("Введен некорректный вариант вывода: "),
     KEY_VALUE_MISMATCH("Не у всех ключей указаны значения"),
-    MULTIPLE_CURRENCIES_GRAPH("Для расчета курса по нескольким валютам используйте ключ -output graph");
+    MULTIPLE_CURRENCIES_GRAPH("Для расчета курса по нескольким валютам используйте ключ -output graph"),
+    EMPTY_LIST("Список сущностей, по которым ведется расчет, пустой"),
+    ILLEGAL_FILE_STRUCTURE("Некорректная структура файла"),
+    EMPTY_SET("Значения валют отсутствуют");
 
     @Getter
     private final String message;

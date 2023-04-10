@@ -7,9 +7,12 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import ru.liga.currencyforecaster.exception.EmptyObjectException;
 import ru.liga.currencyforecaster.model.Currency;
 
 import java.util.List;
+
+import static ru.liga.currencyforecaster.enums.MessageEnum.EMPTY_LIST;
 
 /**
  * Класс для создания графиков
@@ -38,15 +41,6 @@ public class GraphBuilder {
         log.debug("Built XYchart for graph");
     }
 
-    private XYSeries createXYSeries(List<Currency> currencies) {
-        XYSeries values = new XYSeries(currencies.get(NEWEST_CURRENCY_INDEX).getCurrencyType().getCurrencyName());
-
-        for (int i = 1; i <= currencies.size(); i++) {
-            values.add(i, currencies.get(i - 1).getRate());
-        }
-        return values;
-    }
-
     private XYDataset createDataset(List<Currency>... currencies) {
         XYSeriesCollection dataset = new XYSeriesCollection();
 
@@ -54,5 +48,17 @@ public class GraphBuilder {
             dataset.addSeries(createXYSeries(currency));
         }
         return dataset;
+    }
+
+    private XYSeries createXYSeries(List<Currency> currencies) {
+        if (currencies.isEmpty()) {
+            throw new EmptyObjectException(EMPTY_LIST.getMessage());
+        }
+        XYSeries values = new XYSeries(currencies.get(NEWEST_CURRENCY_INDEX).getCurrencyType().getCurrencyName());
+
+        for (int i = 1; i <= currencies.size(); i++) {
+            values.add(i, currencies.get(i - 1).getRate());
+        }
+        return values;
     }
 }

@@ -8,6 +8,7 @@ import ru.liga.currencyforecaster.enums.AlgorithmTypeEnum;
 import ru.liga.currencyforecaster.enums.CurrencyTypeEnum;
 import ru.liga.currencyforecaster.enums.ForecastRangeEnum;
 import ru.liga.currencyforecaster.enums.KeyEnum;
+import ru.liga.currencyforecaster.exception.EmptyObjectException;
 import ru.liga.currencyforecaster.factory.AlgorithmFactory;
 import ru.liga.currencyforecaster.factory.CurrencyMapperFactory;
 import ru.liga.currencyforecaster.mapper.CurrencyMapper;
@@ -26,6 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static ru.liga.currencyforecaster.enums.MessageEnum.EMPTY_SET;
 
 @Slf4j
 public class ForecastBuilder {
@@ -78,6 +81,9 @@ public class ForecastBuilder {
      * @return Изображение графа
      */
     public SendPhoto getGraph(Long chatId, Set<CurrencyTypeEnum> currencies) {
+        if (currencies.isEmpty()) {
+            throw new EmptyObjectException(EMPTY_SET.getMessage());
+        }
         List<CurrencyTypeEnum> tempCur = new ArrayList<>(currencies);
         List<Currency>[] forecastPattern = new List[currencies.size()];
 

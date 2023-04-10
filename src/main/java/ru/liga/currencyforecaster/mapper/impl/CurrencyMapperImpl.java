@@ -14,32 +14,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ru.liga.currencyforecaster.enums.DelimiterEnum.*;
+import static ru.liga.currencyforecaster.enums.MessageEnum.ILLEGAL_FILE_STRUCTURE;
 
 @Slf4j
 public class CurrencyMapperImpl implements CurrencyMapper {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
+    /**
+     * Индекс строки с названиями столбцов csv-файла
+     */
     private static final int CSV_COLUMNS_NAMES_INDEX = 0;
 
     /**
      * Индекс значения для поля nominal при парсинге строки в объект Currency
      */
-    private static int nominalIndex;
+    private int nominalIndex;
 
     /**
      * Индекс значения для поля date при парсинге строки в объект Currency
      */
-    private static int dateIndex;
+    private int dateIndex;
 
     /**
      * Индекс значения для поля rate при парсинге строки в объект Currency
      */
-    private static int rateIndex;
+    private int rateIndex;
 
     /**
      * Индекс значения для поля currencyType при парсинге строки в объект Currency
      */
-    private static int currencyTypeIndex;
+    private int currencyTypeIndex;
 
     @Override
     public List<Currency> parseFile(List<String> lines) {
@@ -52,7 +56,7 @@ public class CurrencyMapperImpl implements CurrencyMapper {
                 case DATA -> dateIndex = i;
                 case CURS -> rateIndex = i;
                 case CDX -> currencyTypeIndex = i;
-                case DEF -> throw new ValidationException("File structure is not valid");
+                case DEF -> throw new ValidationException(ILLEGAL_FILE_STRUCTURE.getMessage());
             }
         }
         for (int i = 1; i < lines.size(); i++) {
