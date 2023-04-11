@@ -22,12 +22,15 @@ public class ForecastAlgorithmLastYear implements ForecastAlgorithm {
         if (currencies.isEmpty()) {
             throw new EmptyObjectException(EMPTY_LIST.getMessage());
         }
-        List<Currency> tmpCurrencies = new ArrayList<>(currencies);
         List<Currency> ratesResult = new ArrayList<>();
+        Map<LocalDate, Currency> currenciesByDate = new HashMap<>();
 
+        for (Currency currency : currencies) {
+            currenciesByDate.put(currency.getDate(), currency);
+        }
         for (int i = 0; i < daysAmount; i++) {
             LocalDate rateDate = startDate.plusDays(i);
-            Currency lastYearRete = predictRateForNextDay(tmpCurrencies, rateDate);
+            Currency lastYearRete = predictRateForNextDay(currenciesByDate, rateDate);
             Currency newRate = new Currency(lastYearRete.getNominal(),
                     rateDate,
                     lastYearRete.getRate(),
@@ -39,19 +42,15 @@ public class ForecastAlgorithmLastYear implements ForecastAlgorithm {
         return ratesResult;
     }
 
-    private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
-        Map<LocalDate, Currency> tempCur = new HashMap<>();
+    private Currency predictRateForNextDay(Map<LocalDate, Currency> currenciesByDate, LocalDate date) {
         LocalDate lastYearDate = date.minusYears(1);
         int daysIncrement = 1;
         int yearsIncrement = 1;
 
-        for (Currency currency : currencies) {
-            tempCur.put(currency.getDate(), currency);
-        }
-        while (!tempCur.containsKey(lastYearDate)) {
+        while (!currenciesByDate.containsKey(lastYearDate)) {
             lastYearDate = date.minusYears(yearsIncrement).minusDays(daysIncrement);
             daysIncrement++;
         }
-        return tempCur.get(lastYearDate);
+        return currenciesByDate.get(lastYearDate);
     }
 }

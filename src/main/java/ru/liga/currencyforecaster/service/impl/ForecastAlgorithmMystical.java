@@ -6,6 +6,7 @@ import ru.liga.currencyforecaster.model.Currency;
 import ru.liga.currencyforecaster.service.ForecastAlgorithm;
 
 import java.time.LocalDate;
+import java.time.MonthDay;
 import java.util.*;
 
 import static ru.liga.currencyforecaster.enums.MessageEnum.EMPTY_LIST;
@@ -26,14 +27,21 @@ public class ForecastAlgorithmMystical implements ForecastAlgorithm {
         }
         List<Currency> tmpCurrencies = new ArrayList<>(currencies);
         List<Currency> ratesResult = new ArrayList<>();
+        Set<MonthDay> monthDays = new HashSet<>();
+        Map<LocalDate, Currency> currenciesByDate = new HashMap<>();
+
+        for (Currency currency : tmpCurrencies) {
+            monthDays.add(MonthDay.of(currency.getDate().getMonth(), currency.getDate().getDayOfMonth()));
+            currenciesByDate.put(currency.getDate(), currency);
+        }
 
         for (int i = 0; i < daysAmount; i++) {
             LocalDate rateDate = startDate.plusDays(i);
-            if (!ifDateExists(tmpCurrencies, rateDate)) {
+            if (!ifDateExists(monthDays, rateDate)) {
                 log.warn("Date {} does not exist", rateDate);
                 continue;
             }
-            Currency lastYearRete = predictRateForNextDay(tmpCurrencies, rateDate);
+            Currency lastYearRete = predictRateForNextDay(currenciesByDate, tmpCurrencies, rateDate);
             Currency newRate = new Currency(lastYearRete.getNominal(),
                     rateDate,
                     lastYearRete.getRate(),
@@ -46,21 +54,22 @@ public class ForecastAlgorithmMystical implements ForecastAlgorithm {
         return ratesResult;
     }
 
-    private Currency predictRateForNextDay(List<Currency> currencies, LocalDate date) {
-        Map<LocalDate, Currency> tempCur = new HashMap<>();
+    private Currency predictRateForNextDay(Map<LocalDate, Currency> currenciesByDate,
+                                           List<Currency> currencies,
+                                           LocalDate date) {
         Random random = new Random();
         LocalDate tempDate;
-
-        for (Currency currency : currencies) {
-            tempCur.put(currency.getDate(), currency);
-        }
         do {
             int yearsAmount = random.nextInt(findYearsAmount(currencies));
             tempDate = LocalDate.of(date.minusYears(yearsAmount).getYear(),
                     date.getMonth(),
                     date.getDayOfMonth());
-        } while (!tempCur.containsKey(tempDate));
-        return tempCur.get(tempDate);
+        } while (!currenciesByDate.containsKey(tempDate));
+        return currenciesByDate.get(tempDate);
+    }
+
+    private boolean ifDateExists(Set<MonthDay> monthDays, LocalDate date) {
+        return monthDays.contains(MonthDay.of(date.getMonth(), date.getDayOfMonth()));
     }
 
     private int findYearsAmount(List<Currency> currencies) {
@@ -68,15 +77,5 @@ public class ForecastAlgorithmMystical implements ForecastAlgorithm {
         int lastYear = currencies.get(currencies.size() - 1).getDate().getYear();
 
         return firstYear - lastYear;
-    }
-
-    private boolean ifDateExists(List<Currency> currencies, LocalDate date) {
-        for (Currency currency : currencies) {
-            if (date.getMonth().equals(currency.getDate().getMonth())
-                    && date.getDayOfMonth() == currency.getDate().getDayOfMonth()) {
-                return true;
-            }
-        }
-        return false;
     }
 }
